@@ -1,0 +1,145 @@
+/* CSS PROVISIONAL */
+
+
+body {
+  font-family: "K2D", sans-serif;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  background-image: url('background-web.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+}
+
+.vector {
+  width: 5px; 
+  height: 5em;
+  background-color: rgb(97, 153, 226);
+  margin-left: 20px;
+  margin-right: 20px;
+  display: inline-block;
+}
+
+.nav-logo {
+  margin-bottom: 1em;
+}
+
+.text-logo {
+  color: var(--Accent-Accent-400, #E6E6BF);
+  text-align: center;
+  font-family: Mont;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  letter-spacing: 3.2px;
+  margin-bottom: 1em;
+  width: 1%;
+  display: inline-block;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.contact-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  width: 300px;
+}
+
+.contact-form button {
+  padding: 10px 20px;
+  background-color: #1b42c3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #0a2d66;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 98vh;
+  top: 0;
+  position: fixed;
+  width: 15%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #1b42c3;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+nav .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(to bottom, #1b42c3, #0a2d66);
+  padding: 20px 20px;
+}
+
+nav .container .nav-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  margin: 20px 0;
+  color: #E6E6BF;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+nav .container .nav-link:hover {
+  background-color: #1a3a6b;
+  color: #c7c7a3;
+  transform: scale(1.1);
+}
+
+nav .container .nav-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 10px 15px;
+  border-radius: 25px;
+}
+
+nav .container .nav-item .nav-icon {
+  font-size: 2.5rem;
+  margin-right: 15px;
+}
+
+nav .container .nav-item span {
+  font-size: 1.5rem;
+}
+
+nav .container .nav-link.active {
+  color: #82B6DF !important;
+}
+
+nav .container img {
+  width: 20%;
+}
