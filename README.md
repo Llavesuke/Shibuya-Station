@@ -9,9 +9,8 @@ Este proyecto es una aplicación web construida con **React** y **Firebase**, qu
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Autenticación con Firebase](#autenticación-con-firebase)
 - [Protección de Rutas](#protección-de-rutas)
-- [Comunicación Asíncrona con la API](#comunicación-asíncrona-con-la-api)
-- [Lazy Loading y Optimización](#lazy-loading-y-optimización)
-
+- [Comunicación Asíncrona con la API](#comunicación-asíncrona-de-la-api)
+- [Lazy Loading y Optimización](#lazyload)
 
 ---
 
@@ -25,7 +24,7 @@ Este proyecto es una aplicación web construida con **React** y **Firebase**, qu
 
 --- 
 
-## Estructuras del Proyecto
+## Estructura del Proyecto
 
 ```plaintext
 src/
