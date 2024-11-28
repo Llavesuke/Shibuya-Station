@@ -7,11 +7,11 @@ Este proyecto es una aplicación web construida con **React** y **Firebase**, qu
 ## Tabla de Contenidos
 - [Características](#características)
 - [Estructura del Proyecto](#estructura-del-proyecto)
-- [Integración de Firebase](#integración-de-firebase)
-- [Rutas Protegidas](#rutas-protegidas)
-- [Comunicación Asíncrona](#comunicación-asíncrona)
-- [Lazy Loading y Optimización](#lazy-loading-y-optimización)
-- [Próximos Pasos](#próximos-pasos)
+- [Autenticacion con Firebase](#autentiación-con-firebase)
+- [Rutas Protegidas](#protección-de-rutas)
+- [Comunicación Asíncrona](#comunicación-asíncrona-con-la-api)
+- [Lazy Loading y Optimización](#lazyload)
+
 
 ---
 
@@ -23,6 +23,7 @@ Este proyecto es una aplicación web construida con **React** y **Firebase**, qu
 - Gestión del estado global: Implementación de React.Context para manejar el estado del usuario.
 - Integración de API: Comunicación asíncrona con Firebase para autenticación y gestión de usuarios.
 
+## Estructuras del Proyecto
 
 ```plaintext
 src/
@@ -210,6 +211,18 @@ Aspectos Destacados
 - Sincronización con la URL: El componente utiliza useLocation y navigate para sincronizar la URL con el estado de la aplicación.
 - Eficiencia: Limita la cantidad de datos solicitados por página, optimizando el rendimiento.
 
+![image](https://github.com/user-attachments/assets/760b2d1c-9f03-49cd-b71a-45c55ebffc0b)
+Una muestra de como obtiene los datos de la API de manera correcta y los muestra sin errores
+
+<br>
+
+![image](https://github.com/user-attachments/assets/dbb05da6-be8e-4b0b-a5b6-0d576f6f83f3)
+Muestra de la paginación
+<br>
+
+![image](https://github.com/user-attachments/assets/efa1634c-d8c3-41ba-906d-e27632421cc5)
+<br>
+Se guarda en la URL la página en la que se esta para que no se pierda el progreso de la aplicación al refrescar
 
  ### Lazyload
  
