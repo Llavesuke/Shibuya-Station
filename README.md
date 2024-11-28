@@ -7,9 +7,9 @@ Este proyecto es una aplicación web construida con **React** y **Firebase**, qu
 ## Tabla de Contenidos
 - [Características](#características)
 - [Estructura del Proyecto](#estructura-del-proyecto)
-- [Autenticacion con Firebase](#autentiación-con-firebase)
-- [Rutas Protegidas](#protección-de-rutas)
-- [Comunicación Asíncrona](#comunicación-asíncrona-con-la-api)
+- [Autenticacion con Firebase](#autentiacion-con-firebase)
+- [Rutas Protegidas](#proteccion-de-rutas)
+- [Comunicación Asíncrona](#comunicacion-asíncrona-con-la-api)
 - [Lazy Loading y Optimización](#lazyload)
 
 
