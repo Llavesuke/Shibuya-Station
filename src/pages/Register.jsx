@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';  // Importa useNavigate
 import 'react-toastify/dist/ReactToastify.css';
+import { registro } from '../config/firebase';
+import isUsserLogged from '../hook/isUsserLogged';
 
 // Función de validación para nombre vacío
 function checkName(name) {
@@ -21,6 +24,11 @@ function checkPassword(password, confirmPassword) {
   if (password !== confirmPassword) {
     return 'Passwords do not match';
   }
+
+  if (password.length < 6) {
+    return 'Passwords must be more than 6 characters'
+  }
+
   return '';
 }
 
@@ -32,49 +40,67 @@ const Register = () => {
     confirmPassword: '',
   });
 
-  const handleSubmit = (e) => {
+
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const nameError = checkName(formData.username);
-    const emailError = checkEmail(formData.email);
-    const passwordError = checkPassword(formData.password, formData.confirmPassword);
-
-    if (nameError) {
-      toast.error('Username is required', {
-        style: {
-          backgroundColor: '#003366',
-          color: '#E2E2B6',
-        },
+  
+    try {
+      // Validación previa
+      const nameError = checkName(formData.username);
+      const emailError = checkEmail(formData.email);
+      const passwordError = checkPassword(formData.password, formData.confirmPassword);
+  
+      if (nameError) {
+        throw new Error("Username is required");
+      }
+  
+      if (emailError) {
+        throw new Error("Valid email is required");
+      }
+  
+      if (passwordError) {
+        throw new Error(passwordError);
+      }
+  
+      // Intentar registro en Firebase
+      await registro({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
       });
-    }
-
-    if (emailError) {
-      toast.error('Valid email is required', {
+  
+      // Solo si no hay errores:
+      console.log("User registered in");
+      toast.success("Registration successful!", {
         style: {
-          backgroundColor: '#003366',
-          color: '#E2E2B6',
-        },
-      });
-    }
-
-    if (passwordError) {
-      toast.error(passwordError, {
-        style: {
-          backgroundColor: '#003366',
-          color: '#E2E2B6',
-        },
-      });
-    }
-
-    if (!nameError && !emailError && !passwordError) {
-      toast.success('Form submitted successfully!', {
-        style: {
-          backgroundColor: '#003366',
-          color: '#E2E2B6',
+          backgroundColor: "#003366",
+          color: "#E2E2B6",
         },
       });
 
-      console.log('Form Data:', formData);
+      // Redirigir a /profile después de un registro exitoso
+      isUsserLogged()
+    } catch (error) {
+      // Manejo de errores (Firebase o validación)
+      console.error("Error during registration:", error.code, error.message);
+  
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("This email is already in use. Please use a different email.", {
+          style: {
+            backgroundColor: "#003366",
+            color: "#E2E2B6",
+          },
+        });
+      } else {
+        // Mensaje genérico para otros errores
+        toast.error(error.message, {
+          style: {
+            backgroundColor: "#003366",
+            color: "#E2E2B6",
+          },
+        });
+      }
     }
   };
 
@@ -92,7 +118,7 @@ const Register = () => {
         <label htmlFor="email" id="emailInput">Email:</label>
         <input
           type="text"
-          name="email"
+          name="email"                          
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />

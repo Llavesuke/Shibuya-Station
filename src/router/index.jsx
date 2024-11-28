@@ -1,35 +1,43 @@
 import { createBrowserRouter } from "react-router-dom"; 
 import Home from "../pages/Home";
-import Profile from "../pages/Profile";
-import Library from "../pages/Library";
-import Notifications from "../pages/Notifications";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Contact from "../pages/Contact";
-import NotFound from "../pages/NotFound"; 
 import LayoutPublic from "../layouts/LayoutPublic"; 
+import { lazy } from "react";
+import PublicRoute from "../layouts/PublicRoute";  
+import PrivateRoute from "../layouts/PrivateRoute"; 
+
+// Lazy-loads
+const Library = lazy(() => import("../pages/Library"))
+const Login = lazy(() => import("../pages/Login"))
+const Register = lazy(() => import("../pages/Register"))
+const Notifications = lazy(() => import("../pages/Notifications"))
+const Profile = lazy(() => import("../pages/Profile"))
+const NotFound = lazy(() => import("../pages/NotFound"))
+const Contact = lazy(() => import("../pages/Contact"))
 
 export const router = createBrowserRouter([
     {
-        path: "/", // Ruta principal de la aplicación.
-        element: <LayoutPublic/>, // Define el layout que envolverá las rutas anidadas.
-        errorElement: <NotFound/>, // Página que se muestra en caso de un error (por ejemplo, ruta no encontrada).
-        children: [ // Rutas anidadas dentro del layout principal.
+        path: "/", 
+        element: <LayoutPublic/>,
+        errorElement: <NotFound/>,
+        children: [
             {
-                index: true, // Ruta predeterminada cuando se accede a "/".
+                index: true, 
                 element: <Home/> 
             },
             {
                 path: "profile",
-                element: <Profile/>
+                element: (
+                    <PrivateRoute>
+                        <Profile/>
+                    </PrivateRoute>
+                )
             },
             {
                 path: "library", 
                 element: <Library/> 
             },
             {
-                path: "library/:id", // Ruta dinámica para "/library/:id". 
-                // Nota: No se define un elemento aún
+                path: "library/:id", 
             },
             {
                 path: "notifications",
@@ -37,11 +45,19 @@ export const router = createBrowserRouter([
             },
             {
                 path: "login", 
-                element: <Login/>
+                element: (
+                    <PublicRoute>
+                        <Login/>
+                    </PublicRoute>
+                )
             },
             {
                 path: "register",
-                element: <Register/> 
+                element: (
+                    <PublicRoute>
+                        <Register/> 
+                    </PublicRoute>
+                )
             },
             {
                 path: "contact",

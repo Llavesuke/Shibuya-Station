@@ -1,52 +1,84 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom'; // Importa NavLink para navegación con estilos activos.
-import { FaHome, FaUser, FaBook, FaBell } from 'react-icons/fa'; // Importa íconos específicos de react-icons.
+import React, { useContext } from 'react';
+import { NavLink } from 'react-router-dom'; // Importa NavLink para navegación.
+import { FaHome, FaUser, FaBook, FaBell } from 'react-icons/fa'; // Importa íconos.
+import { UserContext } from '../context/userContext'; // Importa el UserContext
+import CloseSession from '../components/CloseSession';
 
 const Navbar = () => {
+  const [user, setUser] = useContext(UserContext); 
+
   return (
-    <nav>
-      <div className='container'>
-        {/* Logo y texto principal de la aplicación */}
-        <NavLink to="/" className="nav-link">
-          <div className="nav-logo">
-            <img src="Train-icon.svg" className="nav-logo" alt="" />
-            <div className="vector"></div> 
-            <p className="text-logo">SHIBUYA STATION</p>
-          </div>
-        </NavLink>
+    <nav className='navbar'>
 
-        {/* Enlace a la página Home */}
-        <NavLink to="/" className="nav-link">
-          <div className="nav-item">
-            <FaHome className="nav-icon" /> {/* Ícono de casa para el menú Home */}
-            <span>Home</span>
-          </div>
+      <ul>
+        <li>
+        <NavLink to="/" className="navbar__link">
+            <img src="Train-icon.svg" className="link__logo" alt="" />
+            <div className="link__vector"></div>
+            <p className="link__title">SHIBUYA STATION</p>
         </NavLink>
+        </li>
 
-        {/* Enlace a la página Profile */}
-        <NavLink to="/profile" className="nav-link">
-          <div className="nav-item">
-            <FaUser className="nav-icon" /> {/* Ícono de usuario para el perfil */}
-            <span>Profile</span>
-          </div>
+        {/* Home link */}
+        <li>
+        <NavLink to="/" className="navbar__link">
+            <FaHome className="link__icon" />
+            <span className='link__text'>Home</span>
         </NavLink>
+          
+        </li>
 
-        {/* Enlace a la página Library */}
-        <NavLink to="/library" className="nav-link">
-          <div className="nav-item">
-            <FaBook className="nav-icon" /> {/* Ícono de libro para la biblioteca */}
-            <span>Library</span>
-          </div>
-        </NavLink>
+        <li>
+        {!user && (
+          <>
+            <NavLink to="/login" className="navbar__link">
+                <span className='link__text'>Login</span>
+            </NavLink>
+          </>
+        )}
 
-        {/* Enlace a la página Notifications */}
-        <NavLink to="/notifications" className="nav-link">
-          <div className="nav-item">
-            <FaBell className="nav-icon" /> {/* Ícono de campana para notificaciones */}
-            <span>Notifications</span>
-          </div>
+        {!user && (
+          <>
+          <NavLink to="/register" className="navbar__link">
+                <span className='link__text'>Register</span> 
+            </NavLink>
+          </>
+        )}
+        </li>
+
+        <li>
+        {user && ( 
+          <><NavLink to="/profile" className="navbar__link">
+            <FaUser className="link__icon" />
+            <span className='link__text'>Profile</span>
+        </NavLink> 
+        </>
+        )}
+        </li>
+
+        <li>
+        <NavLink to="/library" className="navbar__link">
+            <FaBook className="link__icon" />
+            <span className='link__text'>Library</span>
         </NavLink>
-      </div>
+        </li>
+
+        <li>
+        <NavLink to="/notifications" className="navbar__link">
+            <FaBell className="link__icon" />
+            <span className='link__text'>Notifications</span>
+        </NavLink>
+        </li>
+
+        <li>
+        {user && (
+            <>
+                <CloseSession className="navbar__link"/> 
+            </>
+        )}
+        </li>
+
+      </ul>
     </nav>
   );
 };

@@ -1,6 +1,6 @@
 /* CSS PROVISIONAL */
 
-
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 body {
   font-family: "K2D", sans-serif;
   font-weight: 600;
@@ -14,14 +14,13 @@ body {
   height: 100%;
 }
 
-.vector {
-  width: 5px; 
-  height: 5em;
-  background-color: rgb(97, 153, 226);
-  margin-left: 20px;
-  margin-right: 20px;
-  display: inline-block;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
 }
+
 
 .nav-logo {
   margin-bottom: 1em;
@@ -95,51 +94,209 @@ body {
   padding: 10px 20px;
 }
 
-nav .container {
+/* Pagination */
+
+div {
+  width: 80%;
+  max-width: 1200px; 
+  text-align: center; 
+}
+
+.manga-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.manga-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  background: linear-gradient(to bottom, #1b42c3, #0a2d66);
-  padding: 20px 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-nav .container .nav-link {
-  display: block;
+.manga-card img {
   width: 100%;
-  text-decoration: none;
+  height: auto;
+  border-radius: 4px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-left: 500px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+
+.right-aligned {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   margin: 20px 0;
-  color: #E6E6BF;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-left: 500px;
+  margin-right: 0;  
 }
 
-nav .container .nav-link:hover {
-  background-color: #1a3a6b;
-  color: #c7c7a3;
-  transform: scale(1.1);
+
+
+.title-manga{
+  margin-left: 800px;
+}     
+
+
+/* CSS BUENO */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "K2D", sans-serif;
 }
 
-nav .container .nav-item {
+:root{
+  font-size: 16px;
+}
+
+
+.link__vector {
+  width: 5px; 
+  height: 5em;
+  background-color: rgb(97, 153, 226);
+  margin-left: 20px;
+  margin-right: 20px;
+  display: inline-block;
+}
+
+
+/* Estilos generales para el navbar */
+/* Navbar */
+.navbar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: fixed;
+  width: 4rem; /* Comprimida por defecto */
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #1b42c3;
+  color: #fff;
+  padding: 1rem 0 0 0;
+  transition: width 0.3s ease, padding 0.3s ease; /* Transición para expandir */
+}
+
+.navbar:hover {
+  width: 20%; /* Expande el navbar al pasar el mouse */
+  padding: 1rem; /* Vuelve a su padding original */
+}
+
+/* Estilos para los enlaces de navegación */
+.navbar__link {
   display: flex;
   align-items: center;
-  cursor: pointer;
+  width: 100%;
+  text-decoration: none;
+  margin: 1rem 0;
+  color: #E6E6BF;
+  padding: 1rem 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease, text-align 0.3s ease;
+  position: relative;
+  border-radius: 20rem;
+}
+
+/* Modificador para los enlaces activos */
+.navbar__link--active {
+  color: #82B6DF;
+}
+
+/* Hover efecto para los enlaces */
+.navbar__link:hover {
+  background-color: #1a3a6b;
+  color: #c7c7a3;
+  transform: scale(1.05);
+  text-align: center;
+  border-radius: 20rem;
+}
+
+/* Estilo para los iconos dentro de los items */
+.link__icon {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+}
+
+/* Ocultar texto por defecto */
+.link__text {
   font-size: 1.5rem;
-  padding: 10px 15px;
-  border-radius: 25px;
+  visibility: hidden; /* Oculta el texto por defecto */
+  opacity: 0; /* También lo hace invisible */
+  transition: visibility 0s, opacity 0.3s ease; /* Transición suave para la visibilidad */
 }
 
-nav .container .nav-item .nav-icon {
-  font-size: 2.5rem;
-  margin-right: 15px;
+/* Mostrar texto solo cuando está en hover */
+.navbar:hover .navbar__link .link__text, .link__title {
+  visibility: visible;
+  opacity: 1; /* Muestra el texto con suavidad */
 }
 
-nav .container .nav-item span {
-  font-size: 1.5rem;
+/* Estilos para el logo */
+.link__logo {
+  width: 100%;
+  margin-right: 1rem;
 }
 
-nav .container .nav-link.active {
-  color: #82B6DF !important;
+.link__title {
+  width: 80%;
+  font-size: 2rem;
+  visibility: hidden; /* Oculta el texto por defecto */
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.2rem;
 }
 
-nav .container img {
-  width: 20%;
+
+
+/* Responsividad para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .navbar__link {
+    padding: 8px 10px; /* Ajuste de padding para pantallas pequeñas */
+  }
+}
+
+
+
+
+
+/* RESETS */
+
+/* Resetear el estilo de las listas */
+ul {
+  list-style: none; /* Elimina los puntos o viñetas de la lista */
+  padding: 0; /* Elimina el padding por defecto */
+  margin: 0; /* Elimina el margen por defecto */
+}
+
+/* Opcional: si deseas asegurarte de que los elementos de la lista no tengan márgenes o rellenos indeseados */
+li {
+  margin: 0;
+  padding: 0;
 }

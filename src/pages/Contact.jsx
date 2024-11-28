@@ -1,108 +1,97 @@
-import React, { useState } from 'react';
+import { Formik } from 'formik';
+import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Función para verificar si el contenido de un campo está vacío
-function checkIsEmpty(content) {
-  return content === '';
-}
-
-// Función para verificar si el email tiene el formato correcto
-function checkEmail(email){
-  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // Expresión regular para validar email
-  return !regex.test(email);
-}
+import * as Yup from "yup";
 
 const Contact = () => {
-  // Estado para almacenar los datos del formulario (nombre, correo, mensaje)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
 
-  // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = async (values, { setSubmitting, setErrors, resetForm, setTouched }) => {
+    try {  
 
-    // Validaciones para cada campo
-    const nameError = checkIsEmpty(formData.name); 
-    const emailError = checkEmail(formData.email);
-    const messageError = checkIsEmpty(formData.message);
-
-    // Si el nombre está vacío, muestra una notificación de error
-    if (nameError) {
-      toast('Name is required', {
-        style: {
+      toast('Form submitted successfully: ');
+      resetForm();
+      setErrors({});
+      setTouched({});
+    } catch (error) {
+      setErrors({ general: error.message });
+      toast.error(error.message, {
+        style: {  
           backgroundColor: '#003366', 
           color: '#E2E2B6',
         },
       });
-    }
-
-    // Si el email no es válido, muestra una notificación de error
-    if (emailError) {
-      toast('Valid email is required', {
-        style: {
-          backgroundColor: '#003366',
-          color: '#E2E2B6',
-        },
-      });
-    }
-
-    // Si el mensaje está vacío, muestra una notificación de error
-    if (messageError) {
-      toast('Message is required', {
-        style: {
-          backgroundColor: '#003366', 
-          color: '#E2E2B6', 
-        },
-      });
-    }
-
-    // Si no hay errores, muestra una notificación de éxito
-    if (!nameError && !emailError && !messageError) {
-      toast('Form submitted successfully:', formData); 
+    } finally {
+      setSubmitting(false);
     }
   };
+  
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().trim().min(3, "Minimo 3 caracteres").required("El campo nombre es requerido"),
+    email: Yup.string()
+      .trim()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "El email no es válido"
+      ).required("El campo email es requerido"), 
+    message: Yup.string().trim().min(6, "Mínimo 6 caracteres").required("El campo message es requerido")
+  });
 
   return (
-    <>
-      {/* El formulario tiene la clase "contact-form" y ejecuta la función handleSubmit al enviarse */}
-      <form className="contact-form" onSubmit={handleSubmit}>
-        {/* Campo para el nombre */}
-        <label htmlFor="name" id="nameInput">Name:</label>
-        <input 
-          type="text"
-          name="name"
-          value={formData.name} 
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
+    <Formik
+      initialValues={{
+        name: '',
+        email: '',
+        message: ''
+      }}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      {({
+        values, handleChange, handleBlur, handleSubmit, isSubmitting, errors, touched, setTouched
+      }) => (
+        <form
+          className="contact-form" 
+          onSubmit={handleSubmit}
+        >
+          <label htmlFor="name" id="nameInput">Name:</label>
+          <input 
+            type="text"
+            name="name"
+            value={values.name} 
+            onChange={handleChange} 
+            onBlur={handleBlur}
+          />
+          {touched.name && errors.name && <div style={{ color: 'red' }}>{errors.name}</div>}
 
-        {/* Campo para el email */}
-        <label htmlFor="email" id="emailInput">Email:</label>
-        <input 
-          type="text" 
-          name="email" 
-          value={formData.email} 
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
+          <label htmlFor="email" id="emailInput">Email:</label>
+          <input 
+            type="email"  
+            name="email" 
+            value={values.email} 
+            onChange={handleChange} 
+            onBlur={handleBlur} 
+          />
+          {touched.email && errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
 
-        {/* Campo para el mensaje */}
-        <label htmlFor="message" id="messageInput">Message:</label>
-        <textarea 
-          id="message" 
-          name="message"
-          value={formData.message} 
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-        ></textarea>
+          <label htmlFor="message" id="messageInput">Message:</label>
+          <textarea 
+            id="message" 
+            name="message"
+            value={values.message} 
+            onChange={handleChange}
+            onBlur={handleBlur} 
+          />
+          {touched.message && errors.message && <div style={{ color: 'red' }}>{errors.message}</div>}
 
-        <button type="submit" id="formSubmitBtn">Send</button>
-      </form>
+          {errors.general && <div style={{ color: 'red' }}>{errors.general}</div>}
 
-      {/* Contenedor para mostrar las notificaciones */}
-      <ToastContainer />
-    </>
+          <ToastContainer />
+          <button type="submit" disabled={isSubmitting} id="formSubmitBtn">Send</button>
+        </form>
+      )}
+    </Formik>
   );
 }
 

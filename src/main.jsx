@@ -1,11 +1,17 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.css';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router/index'; 
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} /> 
-  </StrictMode>
+import { router } from "./router";
+import { RouterProvider } from "react-router-dom";
+import UserProvider from "./context/userContext";
+import { VscLoading } from "react-icons/vsc";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+
+    <UserProvider>
+        <Suspense fallback={<VscLoading />}>
+                <RouterProvider router={router} />
+        </Suspense>
+    </UserProvider>
 );
