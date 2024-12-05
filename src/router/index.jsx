@@ -4,6 +4,7 @@ import LayoutPublic from "../layouts/LayoutPublic";
 import { lazy } from "react";
 import PublicRoute from "../layouts/PublicRoute";  
 import PrivateRoute from "../layouts/PrivateRoute"; 
+import Chapter from "../pages/Chapter";
 
 // Lazy-loads
 const Library = lazy(() => import("../pages/Library"))
@@ -13,6 +14,7 @@ const Notifications = lazy(() => import("../pages/Notifications"))
 const Profile = lazy(() => import("../pages/Profile"))
 const NotFound = lazy(() => import("../pages/NotFound"))
 const Contact = lazy(() => import("../pages/Contact"))
+const Manga = lazy(() => import("../pages/Manga"))
 
 export const router = createBrowserRouter([
     {
@@ -37,7 +39,12 @@ export const router = createBrowserRouter([
                 element: <Library/> 
             },
             {
-                path: "library/:id", 
+                path: "manga/:mangaId", 
+                element: <Manga/>
+            },
+            {
+                path: "chapter/:chapterId",
+                element: <Chapter/>
             },
             {
                 path: "notifications",

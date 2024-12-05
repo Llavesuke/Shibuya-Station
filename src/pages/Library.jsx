@@ -1,102 +1,147 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import MangaCard from '../components/MangaCard';
+import useMangaFilters from '../hook/useMangaFilters';
+import SearchBar from '../components/SearchBarLibrary';
+import Filters from '../components/Filters';
+import Pagination from '../components/Pagination';
+import AuthorSearch from '../components/AuthorSearch';
+import useTagFilters from '../hook/useTagFilters';
 
 const Library = () => {
   const [mangas, setMangas] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalMangas, setTotalMangas] = useState(0);
-  const mangasPerPage = 9;
-  const baseUrl = 'https://api.mangadex.org';
+  const [author, setAuthor] = useState('');
+  const [authorUUID, setAuthorUUID] = useState('');
+  const navigate = useNavigate();
   const location = useLocation();
-  const navigate = useNavigate(); 
 
-  // Función para obtener los mangas de la API
-  const fetchMangas = async (page) => {
-    const offset = (page - 1) * mangasPerPage;
-    try {
-      const resp = await axios({
-        method: 'GET',
-        url: `${baseUrl}/manga`,
-        params: {
-          limit: mangasPerPage, // Límite de mangas a traer por página
-          offset: offset, // Calcula el desplazamiento con base en la página actual
-          includes: ['cover_art'], // Incluir información del arte de portada
-        },
-      });
-      setMangas(resp.data.data);
-      setTotalMangas(resp.data.total);
-    } catch (error) {
-      console.error('Error fetching mangas:', error);
-    }
-  };
+  // Obtener la página actual desde los parámetros de la URL
+  const currentPage = parseInt(new URLSearchParams(location.search).get('page'), 10) || 1;
 
-  // Obtener el número de página desde la URL
-  const getPageFromUrl = () => {
-    const urlParams = new URLSearchParams(location.search);
-    const page = parseInt(urlParams.get('page'), 10);
-    return isNaN(page) ? 1 : page; // Si la página no está definida, regresar 1 por defecto
-  };
+  // Hooks de filtros
+  const {
+    query, setQuery, status, setStatus,
+    demographic, setDemographic, contentRating, setContentRating,
+    fetchMangas
+  } = useMangaFilters(location, currentPage, setMangas, setTotalMangas);
 
+  const {
+    allTags, includedTags, excludedTags, addTag, removeTag
+  } = useTagFilters();
+
+  // Efecto para manejar los filtros desde la URL
   useEffect(() => {
-    const pageFromUrl = getPageFromUrl();
-    setCurrentPage(pageFromUrl); // Sincronizar el estado con la URL
-    fetchMangas(pageFromUrl); // Llamar a la API con la página obtenida
-  }, [location]); // Reejecutar cada vez que cambia la ubicación (URL)
+    const urlParams = new URLSearchParams(location.search);
 
+    // Recuperar los parámetros de la URL y establecer los filtros
+    const queryFromUrl = urlParams.get('query') || '';
+    const authorUUIDFromUrl = urlParams.get('authorUUID') || '';
+    const statusFromUrl = urlParams.get('status') || '';
+    const demographicFromUrl = urlParams.get('demographic') || '';
+    const contentRatingFromUrl = urlParams.get('contentRating') || '';
+
+    const includedTagsFromUrl = urlParams.getAll('includedTags[]');
+    const excludedTagsFromUrl = urlParams.getAll('excludedTags[]');
+
+    // Establecer los filtros de acuerdo a la URL
+    setQuery(queryFromUrl);
+    setAuthorUUID(authorUUIDFromUrl);
+    setStatus(statusFromUrl);
+    setDemographic(demographicFromUrl);
+    setContentRating(contentRatingFromUrl);
+
+    // Agregar tags desde la URL
+    includedTagsFromUrl.forEach(tag => addTag(tag));
+    excludedTagsFromUrl.forEach(tag => removeTag(tag));
+
+    fetchMangas(currentPage); // Obtener mangas filtrados
+
+  }, [location.search, currentPage]); // Ejecutar cuando los filtros o la página cambian
+
+  // Función para actualizar la URL con los filtros actuales
+  const updateUrlParams = () => {
+    const urlParams = new URLSearchParams();
+    if (query) urlParams.set('query', query);
+    if (authorUUID) urlParams.set('authorUUID', authorUUID);
+    if (status) urlParams.set('status', status);
+    if (includedTags.length > 0) {
+      includedTags.forEach(tag => urlParams.append('includedTags[]', tag));
+    }
+    if (excludedTags.length > 0) {
+      excludedTags.forEach(tag => urlParams.append('excludedTags[]', tag));
+    }
+    if (demographic) urlParams.set('demographic', demographic);
+    if (contentRating) urlParams.set('contentRating', contentRating);
+    urlParams.set('page', currentPage);
+    navigate(`?${urlParams.toString()}`);
+  };
+
+  // Función para la paginación hacia la siguiente página
   const nextPage = () => {
-    if (currentPage < Math.ceil(totalMangas / mangasPerPage)) {
-      const newPage = currentPage + 1;
-      setCurrentPage(newPage);
-      navigate(`?page=${newPage}`); // Actualiza la URL con la nueva página
-      fetchMangas(newPage); // Llama a la API con la nueva página
+    if (currentPage < Math.ceil(totalMangas / 15)) {
+      navigate(`?page=${currentPage + 1}`);
     }
   };
 
+  // Función para la paginación hacia la página anterior
   const prevPage = () => {
     if (currentPage > 1) {
-      const newPage = currentPage - 1;
-      setCurrentPage(newPage);
-      navigate(`?page=${newPage}`); // Actualiza la URL con la nueva página
-      fetchMangas(newPage); // Llama a la API con la nueva página
+      navigate(`?page=${currentPage - 1}`);
     }
   };
 
   return (
-    <div>
-      <h1 className='title-manga'>Library</h1>
-      <div className="manga-grid right-aligned"> 
+    <div className="library">
+      <h1 className="library__title">Library</h1>
+
+      <SearchBar query={query} setQuery={setQuery} handleSearch={updateUrlParams} />
+
+      <AuthorSearch
+        author={author}
+        setAuthor={setAuthor}
+        setAuthorUUID={setAuthorUUID}
+        updateUrlParams={updateUrlParams}
+      />
+
+      {/* Filtros de Tags */}
+      <Filters
+        includedTags={includedTags} 
+        excludedTags={excludedTags} 
+        allTags={allTags} 
+        addTag={addTag} 
+        removeTag={removeTag}
+      />
+
+      <div className="library__grid">
         {mangas.map((manga) => {
-          // Busca la relación de 'cover_art' para obtener la URL de la portada
-          const cover = manga.relationships.find(
-            (rel) => rel.type === 'cover_art'
-          );
-          const coverUrl = cover
+          const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
+          const author = manga.relationships?.find((rel) => rel.type === 'author');
+          const coverUrl = cover?.attributes?.fileName
             ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-            : 'https://via.placeholder.com/150'; // Imagen de respaldo si no hay portada disponible
-  
+            : 'https://via.placeholder.com/150';
+          const authorName = author?.attributes?.name || 'Unknown Author';
+          const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
+
           return (
-            <div key={manga.id} className="manga-card">
-              <img src={coverUrl} alt={manga.attributes.title.en} />
-              <h3>{manga.attributes.title.en || 'No Title'}</h3>
-            </div>
+            <MangaCard
+              key={manga.id}
+              id={manga.id}
+              title={title}
+              author={authorName}
+              coverUrl={coverUrl}
+              onClick={() => navigate(`/manga/${manga.id}`)}
+            />
           );
         })}
       </div>
-      <div className="pagination">
-        <button onClick={prevPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>Page {currentPage} of {Math.ceil(totalMangas / mangasPerPage)}</span>
-        <button
-          onClick={nextPage}
-          disabled={currentPage === Math.ceil(totalMangas / mangasPerPage)}
-        >
-          Next
-        </button>
-      </div>
+
+      <Pagination
+        currentPage={currentPage} totalMangas={totalMangas} mangasPerPage={15}
+        nextPage={nextPage} prevPage={prevPage}
+      />
     </div>
   );
-}  
+};
 
 export default Library;
