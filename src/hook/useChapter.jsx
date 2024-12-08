@@ -1,59 +1,60 @@
-/**
- * Custom hook to fetch and manage chapter data.
- * @function
- * @param {string} chapterId - The ID of the chapter to fetch.
- * @returns {Object} The chapter data and navigation functions.
- */
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 const useChapter = (chapterId) => {
-    const [pages, setPages] = useState([]); // State to store the pages of the chapter
-    const [loading, setLoading] = useState(true); // State to manage the loading state
-    const [error, setError] = useState(null); // State to manage any errors
-    const [currentPage, setCurrentPage] = useState(0); // State to manage the current page
-    const [chapterTitle, setChapterTitle] = useState(''); // State to store the chapter title
-    const [mangaTitle, setMangaTitle] = useState(''); // State to store the manga title
-  
-    useEffect(() => {
-      const fetchChapterDetails = async () => {
-        try {
-          // Fetch chapter details and pages here
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
+  const [pages, setPages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [chapterTitle, setChapterTitle] = useState('');
+  const [mangaTitle, setMangaTitle] = useState('');
+
+  useEffect(() => {
+    const fetchChapterDetails = async () => {
+      try {
+        // Obtener los detalles del capítulo
+        const chapterResponse = await axios.get(`https://api.mangadex.org/chapter/${chapterId}`);
+        const chapterData = chapterResponse.data.data;
+        const title = chapterData.attributes.title || null;
+        setChapterTitle(title);
+
+        // Obtener el ID del manga relacionado
+        const mangaId = chapterData.relationships.find((rel) => rel.type === 'manga')?.id;
+        if (mangaId) {
+          // Obtener el título del manga
+          const mangaResponse = await axios.get(`https://api.mangadex.org/manga/${mangaId}`);
+          const mangaData = mangaResponse.data.data;
+          setMangaTitle(mangaData.attributes.title.en || 'Título desconocido');
         }
-      };
-  
-      fetchChapterDetails();
-    }, [chapterId]);
-  
-    /**
-     * Function to go to the next page.
-     */
-    const goToNextPage = () => {
-      if (currentPage < pages.length - 1) {
-        setCurrentPage(currentPage + 1);
+
+        // Obtener las páginas del capítulo
+        const pagesResponse = await axios.get(`https://api.mangadex.org/at-home/server/${chapterId}`);
+        const { baseUrl, chapter } = pagesResponse.data;
+        const imageUrls = chapter.data.map(
+          (filename) => `${baseUrl}/data/${chapter.hash}/${filename}`
+        );
+
+        setPages(imageUrls);
+      } catch (err) {
+        console.error('Error fetching chapter details or pages:', err);
+        setError('No se pudo cargar el capítulo.');
+      } finally {
+        setLoading(false);
       }
     };
-  
-    /**
-     * Function to go to the previous page.
-     */
-    const goToPreviousPage = () => {
-      if (currentPage > 0) {
-        setCurrentPage(currentPage - 1);
-      }
-    };
-  
-    return {
-      pages, // Array of page URLs
-      loading, // Loading state
-      error, // Error state
-      currentPage, // Current page index
-      chapterTitle, // Title of the chapter
-      mangaTitle, // Title of the manga
-      goToNextPage, // Function to go to the next page
-      goToPreviousPage, // Function to go to the previous page
-    };
+
+    fetchChapterDetails();
+  }, [chapterId]);
+
+  return {
+    pages,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    chapterTitle,
+    mangaTitle,
   };
-  
-  export default useChapter;
+};
+
+export default useChapter;

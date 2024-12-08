@@ -2,34 +2,40 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import useChapter from '../hook/useChapter';
 
-/**
- * Chapter component that displays the pages of a manga chapter.
- * @component
- * @returns {JSX.Element} The Chapter component.
- */
 const Chapter = () => {
-  const { chapterId } = useParams(); // Get the chapter ID from the URL parameters
+  const { chapterId } = useParams();
   const {
     pages,
     loading,
     error,
     currentPage,
+    setCurrentPage,
     chapterTitle,
     mangaTitle,
-    goToNextPage,
-    goToPreviousPage,
-  } = useChapter(chapterId); // Use the custom hook to fetch chapter data
+  } = useChapter(chapterId);
+
+  const goToNextPage = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   if (loading) {
-    return <div className="loading">Cargando...</div>; // Show loading message while data is being fetched
+    return <div className="loading">Cargando...</div>;
   }
 
   if (error) {
-    return <div className="error">{error}</div>; // Show error message if there is an error
+    return <div className="error">{error}</div>;
   }
 
   if (pages.length === 0) {
-    return <div className="no-pages">No hay páginas disponibles para este capítulo.</div>; // Show message if no pages are available
+    return <div className="no-pages">No hay páginas disponibles para este capítulo.</div>;
   }
 
   return (
