@@ -1,6 +1,10 @@
+// api/mangaProxy.js
+
 import axios from 'axios';
 
 const baseUrl = 'https://api.mangadex.org';
+
+
 
 export default async function handler(req, res) {
   const { method, query } = req;
@@ -15,7 +19,10 @@ export default async function handler(req, res) {
       console.error('Error fetching image:', error);
       res.status(500).json({ error: 'Error fetching image' });
     }
-  } else if (method === 'GET' && !query.imageUrl) {
+  }
+
+  // Para las búsquedas de mangas
+  else if (method === 'GET' && !query.imageUrl) {
     try {
       const response = await axios.get(`${baseUrl}/manga`, { params: req.query });
       res.status(200).json(response.data);
@@ -23,8 +30,5 @@ export default async function handler(req, res) {
       console.error('Error fetching mangas:', error);
       res.status(500).json({ error: 'Error fetching mangas' });
     }
-  } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
