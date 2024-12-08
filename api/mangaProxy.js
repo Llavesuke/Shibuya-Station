@@ -1,51 +1,42 @@
-import axios from 'axios';
-import Cors from 'cors';
-
-// Configuración de CORS
-const cors = Cors({
-  methods: ['GET', 'OPTIONS'], // Métodos permitidos
-  origin: '*', // Orígenes permitidos (puedes personalizar esto)
-});
-
-// Helper para manejar CORS en APIs de Next.js
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
-
-const baseUrl = 'https://api.mangadex.org';
-
 export default async function handler(req, res) {
-  await runMiddleware(req, res, cors); // Aplica las reglas de CORS
+  const { url } = req.query;
   
-  const { method, query } = req;
+  // Si no hay una URL proporcionada, responder con error
+  if (!url) {
+      return res.status(400).json({ error: 'No URL specified' });
+  }
 
-  if (method === 'GET' && query.imageUrl) {
-    try {
-      const { imageUrl } = query;
-      const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-      const imageBuffer = Buffer.from(response.data, 'binary').toString('base64');
-      res.status(200).json({ image: imageBuffer });
-    } catch (error) {
-      console.error('Error fetching image:', error);
-      res.status(500).json({ error: 'Error fetching image' });
-    }
-  } else if (method === 'GET' && !query.imageUrl) {
-    try {
-      const response = await axios.get(`${baseUrl}/manga`, { params: req.query });
-      res.status(200).json(response.data);
-    } catch (error) {
-      console.error('Error fetching mangas:', error);
-      res.status(500).json({ error: 'Error fetching mangas' });
-    }
-  } else {
-    res.setHeader('Allow', ['GET', 'OPTIONS']);
-    res.status(405).end(`Method ${method} Not Allowed`);
+  // Asegúrate de que la URL sea válida
+  try {
+      const urlObj = new URL(url);
+      if (!urlObj.hostname.includes('mangadex.org')) {
+          return res.status(400).json({ error: 'Invalid URL: Only MangaDex API is allowed' });
+      }
+  } catch (error) {
+      return res.status(400).json({ error: 'Invalid URL format' });
+  }
+
+  try {
+      // Aquí puedes añadir los headers necesarios (si se requiere autenticación o token)
+      const headers = {
+          'User-Agent': 'MyApp/1.0 (https://your-app.com)',  // Añade tu User-Agent
+          'Authorization': 'Bearer <YOUR_ACCESS_TOKEN>',  // Si necesitas autenticación
+      };
+
+      // Realizamos la solicitud a la API de MangaDex
+      const response = await fetch(url, { headers });
+
+      // Si la respuesta es exitosa, devolver los datos
+      if (response.ok) {
+          const data = await response.json();
+          return res.status(200).json(data);
+      }
+
+      // Si la respuesta no es exitosa, devolver un error
+      return res.status(response.status).json({ error: 'Error fetching the data from MangaDex' });
+  } catch (error) {
+      // Manejo de errores en la solicitud
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
