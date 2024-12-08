@@ -1,15 +1,40 @@
 // Filters.jsx
 import React from 'react';
 
+/**
+ * Filters Component
+ * 
+ * This component provides a UI for filtering content based on tags, status, demographic, and content rating.
+ * Users can include or exclude specific tags, select the status of content, target specific demographics,
+ * and choose a content rating.
+ * 
+ * @param {Object} props - The props object.
+ * @param {string[]} props.includedTags - Tags to be included in the filter.
+ * @param {string[]} props.excludedTags - Tags to be excluded from the filter.
+ * @param {string[]} props.allTags - The complete list of tags available for filtering.
+ * @param {Function} props.addTag - Function to add a tag to the included or excluded list.
+ * @param {Function} props.removeTag - Function to remove a tag from the included or excluded list.
+ * @param {string} props.status - The selected status filter (e.g., "ongoing", "completed").
+ * @param {Function} props.setStatus - Function to update the selected status filter.
+ * @param {string} props.demographic - The selected demographic filter (e.g., "shounen", "josei").
+ * @param {Function} props.setDemographic - Function to update the selected demographic filter.
+ * @param {string} props.contentRating - The selected content rating filter (e.g., "PG-13", "R").
+ * @param {Function} props.setContentRating - Function to update the selected content rating filter.
+ * 
+ * @returns {JSX.Element} The Filters component.
+ */
 const Filters = ({
   includedTags, excludedTags, allTags, addTag, removeTag,
   status, setStatus, demographic, setDemographic, contentRating, setContentRating
 }) => {
   return (
     <div className="filters">
+      {/* Tags Section */}
       <div className="filters__section">
         <h3>Tags</h3>
         <div className="filters__tags">
+
+          {/* Included Tags */}
           <div className="filters__tag-list">
             <h4>Included Tags</h4>
             {allTags.map(tag => (
@@ -25,6 +50,7 @@ const Filters = ({
             ))}
           </div>
 
+          {/* Excluded Tags */}
           <div className="filters__tag-list">
             <h4>Excluded Tags</h4>
             {allTags.map(tag => (
@@ -42,7 +68,7 @@ const Filters = ({
         </div>
       </div>
 
-      {/* Filtro de Status */}
+      {/* Status Filter */}
       <div className="filters__section">
         <h3>Status</h3>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -53,7 +79,7 @@ const Filters = ({
         </select>
       </div>
 
-      {/* Filtro Demográfico */}
+      {/* Demographic Filter */}
       <div className="filters__section">
         <h3>Demographic</h3>
         <select value={demographic} onChange={(e) => setDemographic(e.target.value)}>
@@ -65,7 +91,7 @@ const Filters = ({
         </select>
       </div>
 
-      {/* Filtro de Content Rating */}
+      {/* Content Rating Filter */}
       <div className="filters__section">
         <h3>Content Rating</h3>
         <select value={contentRating} onChange={(e) => setContentRating(e.target.value)}>

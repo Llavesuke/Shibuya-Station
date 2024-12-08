@@ -8,6 +8,11 @@ import Pagination from '../components/Pagination';
 import AuthorSearch from '../components/AuthorSearch';
 import useTagFilters from '../hook/useTagFilters';
 
+/**
+ * Library component that displays a list of mangas with filtering and pagination.
+ * @component
+ * @returns {JSX.Element} The Library component.
+ */
 const Library = () => {
   const [mangas, setMangas] = useState([]);
   const [totalMangas, setTotalMangas] = useState(0);
@@ -16,10 +21,10 @@ const Library = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Obtener la página actual desde los parámetros de la URL
+  // Get the current page from the URL parameters
   const currentPage = parseInt(new URLSearchParams(location.search).get('page'), 10) || 1;
 
-  // Hooks de filtros
+  // Hooks for filters
   const {
     query, setQuery, status, setStatus,
     demographic, setDemographic, contentRating, setContentRating,
@@ -30,11 +35,11 @@ const Library = () => {
     allTags, includedTags, excludedTags, addTag, removeTag
   } = useTagFilters();
 
-  // Efecto para manejar los filtros desde la URL
+  // Effect to handle filters from the URL
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
 
-    // Recuperar los parámetros de la URL y establecer los filtros
+    // Retrieve parameters from the URL and set filters
     const queryFromUrl = urlParams.get('query') || '';
     const authorUUIDFromUrl = urlParams.get('authorUUID') || '';
     const statusFromUrl = urlParams.get('status') || '';
@@ -44,22 +49,25 @@ const Library = () => {
     const includedTagsFromUrl = urlParams.getAll('includedTags[]');
     const excludedTagsFromUrl = urlParams.getAll('excludedTags[]');
 
-    // Establecer los filtros de acuerdo a la URL
+    // Set filters according to the URL
     setQuery(queryFromUrl);
     setAuthorUUID(authorUUIDFromUrl);
     setStatus(statusFromUrl);
     setDemographic(demographicFromUrl);
     setContentRating(contentRatingFromUrl);
 
-    // Agregar tags desde la URL
-    includedTagsFromUrl.forEach(tag => addTag(tag));
-    excludedTagsFromUrl.forEach(tag => removeTag(tag));
+    // Add tags from the URL
+    includedTagsFromUrl.forEach(tag => addTag(tag, true));
+    excludedTagsFromUrl.forEach(tag => addTag(tag, false));
 
-    fetchMangas(currentPage); // Obtener mangas filtrados
+    fetchMangas(currentPage); // Fetch filtered mangas
 
-  }, [location.search, currentPage]); // Ejecutar cuando los filtros o la página cambian
+  }, [location.search, currentPage]); // Execute when filters or page change
 
-  // Función para actualizar la URL con los filtros actuales
+  /**
+   * Updates the URL with the current filters.
+   * @function
+   */
   const updateUrlParams = () => {
     const urlParams = new URLSearchParams();
     if (query) urlParams.set('query', query);
@@ -73,21 +81,31 @@ const Library = () => {
     }
     if (demographic) urlParams.set('demographic', demographic);
     if (contentRating) urlParams.set('contentRating', contentRating);
-    urlParams.set('page', currentPage);
+    urlParams.set('page', 1); // Reset the page to 1
     navigate(`?${urlParams.toString()}`);
   };
 
-  // Función para la paginación hacia la siguiente página
+  /**
+   * Handles pagination to the next page.
+   * @function
+   */
   const nextPage = () => {
     if (currentPage < Math.ceil(totalMangas / 15)) {
-      navigate(`?page=${currentPage + 1}`);
+      const urlParams = new URLSearchParams(location.search);
+      urlParams.set('page', currentPage + 1);
+      navigate(`?${urlParams.toString()}`);
     }
   };
 
-  // Función para la paginación hacia la página anterior
+  /**
+   * Handles pagination to the previous page.
+   * @function
+   */
   const prevPage = () => {
     if (currentPage > 1) {
-      navigate(`?page=${currentPage - 1}`);
+      const urlParams = new URLSearchParams(location.search);
+      urlParams.set('page', currentPage - 1);
+      navigate(`?${urlParams.toString()}`);
     }
   };
 
@@ -104,7 +122,7 @@ const Library = () => {
         updateUrlParams={updateUrlParams}
       />
 
-      {/* Filtros de Tags */}
+      {/* Tag Filters */}
       <Filters
         includedTags={includedTags} 
         excludedTags={excludedTags} 
@@ -130,7 +148,7 @@ const Library = () => {
               title={title}
               author={authorName}
               coverUrl={coverUrl}
-              onClick={() => navigate(`/manga/${manga.id}`)}
+              onClick={() => navigate(`/manga/${manga.id}`)} // Navigate to the manga details page
             />
           );
         })}

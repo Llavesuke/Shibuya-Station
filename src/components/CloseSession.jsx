@@ -1,28 +1,37 @@
-import { useContext } from "react"
-import { NavLink } from "react-router-dom"
-import { UserContext } from "../context/userContext" 
-import { logout } from "../config/firebase"
-import { MdOutlineLogout } from "react-icons/md"
+import { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import { logout } from "../config/firebase";
+import { MdOutlineLogout } from "react-icons/md";
 
+/**
+ * Component for closing the user session.
+ * @component
+ */
 export const CloseSession = () => {
-    const [user, setUser] = useContext(UserContext) // Obtiene el estado del usuario y la función para actualizarlo
+    const [user, setUser] = useContext(UserContext); // Get the user state and the function to update it
 
+    /**
+     * Handles the logout process.
+     * @async
+     * @function handleLogout
+     */
     const handleLogout = async () => {
         try {
-            await logout() // Llama a la función para cerrar sesión en Firebase
-            setUser(false) // Actualiza el estado del usuario a "false" para indicar que no está autenticado
-            console.log("Sesión cerrada exitosamente") // Mensaje de éxito en consola
+            await logout(); // Calls the function to log out from Firebase
+            setUser(false); // Updates the user state to "false" to indicate the user is not authenticated
+            console.log("Session closed successfully"); // Success message in console
         } catch (error) {
-            console.error("Error al cerrar sesión:", error) // Manejo de errores si ocurre un problema
+            console.error("Error closing session:", error); // Error handling if a problem occurs
         }
-    }
+    };
 
     return (
         <NavLink to="/" className="navbar__link" onClick={handleLogout}>
             <MdOutlineLogout className="link__icon" />
             <span className="link__text">Logout</span>
         </NavLink>
-    )
-}
+    );
+};
 
-export default CloseSession
+export default CloseSession;

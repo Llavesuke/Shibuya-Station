@@ -1,75 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import useChapter from '../hook/useChapter';
 
+/**
+ * Chapter component that displays the pages of a manga chapter.
+ * @component
+ * @returns {JSX.Element} The Chapter component.
+ */
 const Chapter = () => {
-  const { chapterId } = useParams();
-  const [pages, setPages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [chapterTitle, setChapterTitle] = useState('');
-  const [mangaTitle, setMangaTitle] = useState('');
-
-  useEffect(() => {
-    const fetchChapterDetails = async () => {
-      try {
-        // Obtener los detalles del capítulo
-        const chapterResponse = await axios.get(`https://api.mangadex.org/chapter/${chapterId}`);
-        const chapterData = chapterResponse.data.data;
-        const title = chapterData.attributes.title || null;
-        setChapterTitle(title);
-
-        // Obtener el ID del manga relacionado
-        const mangaId = chapterData.relationships.find((rel) => rel.type === 'manga')?.id;
-        if (mangaId) {
-          // Obtener el título del manga
-          const mangaResponse = await axios.get(`https://api.mangadex.org/manga/${mangaId}`);
-          const mangaData = mangaResponse.data.data;
-          setMangaTitle(mangaData.attributes.title.en || 'Título desconocido');
-        }
-
-        // Obtener las páginas del capítulo
-        const pagesResponse = await axios.get(`https://api.mangadex.org/at-home/server/${chapterId}`);
-        const { baseUrl, chapter } = pagesResponse.data;
-        const imageUrls = chapter.data.map(
-          (filename) => `${baseUrl}/data/${chapter.hash}/${filename}`
-        );
-
-        setPages(imageUrls);
-      } catch (err) {
-        console.error('Error fetching chapter details or pages:', err);
-        setError('No se pudo cargar el capítulo.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChapterDetails();
-  }, [chapterId]);
-
-  const goToNextPage = () => {
-    if (currentPage < pages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const { chapterId } = useParams(); // Get the chapter ID from the URL parameters
+  const {
+    pages,
+    loading,
+    error,
+    currentPage,
+    chapterTitle,
+    mangaTitle,
+    goToNextPage,
+    goToPreviousPage,
+  } = useChapter(chapterId); // Use the custom hook to fetch chapter data
 
   if (loading) {
-    return <div className="loading">Cargando...</div>;
+    return <div className="loading">Cargando...</div>; // Show loading message while data is being fetched
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="error">{error}</div>; // Show error message if there is an error
   }
 
   if (pages.length === 0) {
-    return <div className="no-pages">No hay páginas disponibles para este capítulo.</div>;
+    return <div className="no-pages">No hay páginas disponibles para este capítulo.</div>; // Show message if no pages are available
   }
 
   return (

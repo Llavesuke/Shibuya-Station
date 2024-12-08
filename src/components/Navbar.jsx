@@ -6,15 +6,23 @@ import { FaHome, FaUser, FaBook, FaBell } from 'react-icons/fa';
 import { CgLogIn } from "react-icons/cg";
 import { MdOutlineBorderColor } from "react-icons/md";
 import { UserContext } from '../context/userContext';
-import SearchBar from './SearchBar'; // Importa el componente SearchBar
+import SearchBar from './SearchBar'; // Import the SearchBar component
 import CloseSession from '../components/CloseSession';
 
+/**
+ * Navbar component that displays the navigation bar with links and search functionality.
+ * @component
+ * @returns {JSX.Element} The Navbar component.
+ */
 const Navbar = () => {
-  const [user, setUser] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext); // Get the user state from context
 
-  // Función para manejar los resultados de búsqueda
+  /**
+   * Handles the search results from the SearchBar component.
+   * @param {Array} results - The search results.
+   */
   const handleSearchResults = (results) => {
-    console.log(results); // Los resultados de búsqueda se pueden usar aquí o procesar.
+    console.log(results); // The search results can be used or processed here.
   };
 
   return (
@@ -28,7 +36,7 @@ const Navbar = () => {
           </NavLink>
         </li>
 
-        {/* Barra de búsqueda */}
+        {/* Search bar */}
         <li>
           <SearchBar onSearchResults={handleSearchResults} />
         </li>
@@ -41,7 +49,7 @@ const Navbar = () => {
           </NavLink>
         </li>
 
-        {/* Si no hay usuario, mostrar Login y Register */}
+        {/* If no user, show Login and Register */}
         <li>
           {!user && (
             <>
@@ -57,7 +65,7 @@ const Navbar = () => {
           )}
         </li>
 
-        {/* Si hay un usuario, mostrar Profile y Logout */}
+        {/* If there is a user, show Profile and Logout */}
         <li>
           {user && (
             <>
@@ -69,7 +77,7 @@ const Navbar = () => {
           )}
         </li>
 
-        {/* Enlaces a Library y Notifications */}
+        {/* Links to Library and Notifications */}
         <li>
           <NavLink to="/library" className="navbar__link">
             <FaBook className="link__icon" />

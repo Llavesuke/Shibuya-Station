@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Login.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Login.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { login } from '../config/firebase';
+import { useNavigate } from 'react-router-dom';
+import isUsserLogged from '../hook/isUsserLogged';
+
+/**
+ * Validates the email format.
+ * @function
+ * @param {string} email - The email to validate.
+ * @returns {boolean} True if the email is invalid, false otherwise.
+ */
+function checkEmail(email) {
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return !regex.test(email);
+}
+
+/**
+ * Login component that provides a login form for users.
+ * @component
+ * @returns {JSX.Element} The Login component.
+ */
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const navigate = useNavigate(); // Hook to navigate to other routes
+
+  /**
+   * Handles the form submission.
+   * @async
+   * @function
+   * @param {Object} e - The event object.
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const emailError = checkEmail(formData.email);
+
+    if (emailError) {
+      toast.error('Valid email is required', {
+        style: {
+          backgroundColor: '#003366',
+          color: '#E2E2B6',
+        },
+      });
+      return; // Prevents further execution if there is an error
+    }
+
+    try {
+      await login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      toast.success('Login successful!', {
+        style: {
+          backgroundColor: '#003366',
+          color: '#E2E2B6',
+        },
+      });
+
+      console.log("User logged in");
+
+      isUsserLogged(); // Check if the user is logged in
+
+    } catch (error) {
+      if (error.code === "auth/invalid-credential") {
+        toast.error('Invalid email or password. Please try again', {
+          style: {
+            backgroundColor: '#003366',
+            color: '#E2E2B6',
+          },
+        });
+      }
+
+      console.log(error.code);
+      console.log(error.message);
+    }
+  };
+
+  return (
+    &lt;>
+      &lt;form className="contact-form" onSubmit={handleSubmit}>
+        &lt;label htmlFor="email" id="emailInput">Email:&lt;/label>
+        &lt;input
+          type="text"
+          name="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        />
+
+        &lt;label htmlFor="password" id="passwordInput">Password:&lt;/label>
+        &lt;input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+        />
+
+        &lt;button type="submit" id="formSubmitBtn">Login&lt;/button>
+      &lt;/form>
+
+      &lt;ToastContainer />
+    &lt;/>
+  );
+};
+
+export default Login;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthorSearch">AuthorSearch</a></li><li><a href="global.html#Chapter">Chapter</a></li><li><a href="global.html#CloseSession">CloseSession</a></li><li><a href="global.html#Contact">Contact</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LayoutPublic">LayoutPublic</a></li><li><a href="global.html#Library">Library</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Manga">Manga</a></li><li><a href="global.html#MangaCard">MangaCard</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#PublicRoute">PublicRoute</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchBarLibrary">SearchBarLibrary</a></li><li><a href="global.html#UserContext">UserContext</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#auth">auth</a></li><li><a href="global.html#checkEmail">checkEmail</a></li><li><a href="global.html#checkName">checkName</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#handleLogout">handleLogout</a></li><li><a href="global.html#isUsserLogged">isUsserLogged</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#registro">registro</a></li><li><a href="global.html#useChapter">useChapter</a></li><li><a href="global.html#useMangaFilters">useMangaFilters</a></li><li><a href="global.html#useTagFilters">useTagFilters</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Dec 08 2024 04:16:29 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

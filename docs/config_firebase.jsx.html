@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: config/firebase.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: config/firebase.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+
+/**
+ * Firebase configuration object.
+ * @constant
+ * @type {Object}
+ * @property {string} apiKey - The API key for Firebase.
+ * @property {string} authDomain - The authentication domain for Firebase.
+ * @property {string} projectId - The project ID for Firebase.
+ * @property {string} storageBucket - The storage bucket for Firebase.
+ * @property {string} messagingSenderId - The messaging sender ID for Firebase.
+ * @property {string} appId - The app ID for Firebase.
+ */
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_FIREBASE_APPID
+};
+
+/**
+ * Initialize Firebase app.
+ * @constant
+ * @type {Object}
+ */
+const app = initializeApp(firebaseConfig);
+
+/**
+ * Initialize Firebase Authentication service.
+ * @constant
+ * @type {Object}
+ */
+export const auth = getAuth();
+
+/**
+ * Function to log in a user with email and password.
+ * @function
+ * @param {Object} param0 - The login credentials.
+ * @param {string} param0.email - The user's email.
+ * @param {string} param0.password - The user's password.
+ * @returns {Promise&lt;Object>} The user credential object.
+ */
+export const login = ({ email, password }) => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
+
+/**
+ * Function to register a new user.
+ * @async
+ * @function
+ * @param {Object} param0 - The registration details.
+ * @param {string} param0.username - The user's username.
+ * @param {string} param0.email - The user's email.
+ * @param {string} param0.password - The user's password.
+ * @returns {Promise&lt;Object>} The user credential object.
+ * @throws Will throw an error if registration fails.
+ */
+export const registro = async ({ username, email, password }) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password); // Create a new user with email and password
+    await updateProfile(userCredential.user, { displayName: username }); // Update the user's profile to include the username
+    console.log('User registered:', userCredential.user);
+    return userCredential;
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw error;
+  }
+};
+
+/**
+ * Function to log out the authenticated user.
+ * @function
+ * @returns {Promise&lt;void>} A promise that resolves when the user is logged out.
+ */
+export const logout = () => signOut(auth);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthorSearch">AuthorSearch</a></li><li><a href="global.html#Chapter">Chapter</a></li><li><a href="global.html#CloseSession">CloseSession</a></li><li><a href="global.html#Contact">Contact</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LayoutPublic">LayoutPublic</a></li><li><a href="global.html#Library">Library</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Manga">Manga</a></li><li><a href="global.html#MangaCard">MangaCard</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#PublicRoute">PublicRoute</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchBarLibrary">SearchBarLibrary</a></li><li><a href="global.html#UserContext">UserContext</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#auth">auth</a></li><li><a href="global.html#checkEmail">checkEmail</a></li><li><a href="global.html#checkName">checkName</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#handleLogout">handleLogout</a></li><li><a href="global.html#isUsserLogged">isUsserLogged</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#registro">registro</a></li><li><a href="global.html#useChapter">useChapter</a></li><li><a href="global.html#useMangaFilters">useMangaFilters</a></li><li><a href="global.html#useTagFilters">useTagFilters</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Dec 08 2024 04:16:29 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

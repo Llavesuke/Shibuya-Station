@@ -2,21 +2,79 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
+/**
+ * Manga component that displays detailed information about a manga and its chapters.
+ * @component
+ * @returns {JSX.Element} The Manga component.
+ */
 const Manga = () => {
-  const { mangaId } = useParams();
-  const [mangaDetails, setMangaDetails] = useState(null);
-  const [chapters, setChapters] = useState([]);
+  const { mangaId } = useParams(); // Get the manga ID from the URL parameters
+  const [mangaDetails, setMangaDetails] = useState(null); // State to store manga details
+  const [chapters, setChapters] = useState([]); // State to store chapters
   const baseUrl = 'https://api.mangadex.org';
-  const navigate = useNavigate()
+  const navigate = useNavigate(); // Hook to navigate to other routes
 
+  /**
+   * Handles the click event on a chapter to navigate to the chapter details page.
+   * @function
+   * @param {string} chapterId - The ID of the clicked chapter.
+   */
   const handleChapterClick = (chapterId) => {
     navigate(`/chapter/${chapterId}`); 
+  };
+
+  /**
+   * Handles the change event on the reading status select element.
+   * @function
+   * @param {Object} event - The event object.
+   */
+  const handleReadingStatusChange = (event) => {
+    const selectedReadingStatus = event.target.value;
+    const mangaData = {
+      id: mangaDetails.id,
+      title: mangaDetails.attributes?.title?.en || 'No Title',
+      coverUrl,
+      authorName,
+      description: mangaDetails.attributes?.description?.en || 'No description available.',
+      tags,
+    };
+
+    // Remove manga from all possible statuses
+    ['pendiente', 'leyendo', 'terminado'].forEach(status => {
+      const storedManga = localStorage.getItem(status);
+      if (storedManga) {
+        let mangaList = [];
+        try {
+          mangaList = JSON.parse(storedManga);
+          if (!Array.isArray(mangaList)) {
+            mangaList = [];
+          }
+        } catch (e) {
+          mangaList = [];
+        }
+        const updatedMangaList = mangaList.filter(manga => manga.id !== mangaDetails.id);
+        localStorage.setItem(status, JSON.stringify(updatedMangaList));
+      }
+    });
+
+    // Add manga to the new selected status
+    let existingMangaList = [];
+    try {
+      existingMangaList = JSON.parse(localStorage.getItem(selectedReadingStatus)) || [];
+      if (!Array.isArray(existingMangaList)) {
+        existingMangaList = [];
+      }
+    } catch (e) {
+      existingMangaList = [];
+    }
+    existingMangaList.push(mangaData);
+    localStorage.setItem(selectedReadingStatus, JSON.stringify(existingMangaList));
   };
 
   useEffect(() => {
     const fetchMangaDetails = async () => {
       try {
-        // Obtener detalles del manga
+        // Fetch manga details
         const mangaResponse = await axios.get(`${baseUrl}/manga/${mangaId}`, {
           params: { includes: ['cover_art', 'author', 'tag'] },
         });
@@ -65,7 +123,7 @@ const Manga = () => {
 
   return (
     <div className="manga-container">
-      {/* Sección Izquierda */}
+      {/* Left Section */}
       <div className="manga-left">
         <img className="manga-cover" src={coverUrl} alt={mangaDetails?.attributes?.title?.en || 'No Title'} />
         <h1 className="manga-title">{mangaDetails?.attributes?.title?.en || 'No Title'}</h1>
@@ -78,9 +136,18 @@ const Manga = () => {
             <span key={index} className="manga-tag">{tag}</span>
           ))}
         </div>
+        <div>
+          <label htmlFor="reading-status-select">Estado:</label>
+          <select id="reading-status-select" onChange={handleReadingStatusChange}>
+            <option value="">Selecciona un estado</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="leyendo">Leyendo</option>
+            <option value="terminado">Terminado</option>
+          </select>
+        </div>
       </div>
 
-      {/* Sección Derecha */}
+      {/* Right Section */}
       <div className="manga-right">
         <div className="right__container">
           <h2>Capítulos</h2>
@@ -99,6 +166,7 @@ const Manga = () => {
               </li>
             ))}
           </ul>
+          
         </div>
       </div>
     </div>

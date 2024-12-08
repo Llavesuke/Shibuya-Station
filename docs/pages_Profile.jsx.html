@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Profile.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Profile.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import MangaCard from '../components/MangaCard';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+/**
+ * Profile component that displays the user's profile and their manga lists.
+ * @component
+ * @returns {JSX.Element} The Profile component.
+ */
+const Profile = () => {
+  const [favoriteMangas, setFavoriteMangas] = useState([]);
+  const [pendingMangas, setPendingMangas] = useState([]);
+  const [readingMangas, setReadingMangas] = useState([]);
+  const [completedMangas, setCompletedMangas] = useState([]);
+  const [view, setView] = useState('all'); // State to manage the current view
+  const [profileImage, setProfileImage] = useState('path-to-your-image.png'); // State to manage the profile image
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Load manga lists from localStorage
+    const storedFavorites = JSON.parse(localStorage.getItem('favoriteMangas')) || [];
+    setFavoriteMangas(storedFavorites);
+
+    const storedPending = JSON.parse(localStorage.getItem('pendiente')) || [];
+    setPendingMangas(storedPending);
+
+    const storedReading = JSON.parse(localStorage.getItem('leyendo')) || [];
+    setReadingMangas(storedReading);
+
+    const storedCompleted = JSON.parse(localStorage.getItem('terminado')) || [];
+    setCompletedMangas(storedCompleted);
+  }, []);
+
+  const updateFavorites = (updatedFavorites) => {
+    setFavoriteMangas(updatedFavorites);
+  };
+
+  /**
+   * Handles the view change.
+   * @function
+   * @param {string} newView - The new view to set.
+   */
+  const handleViewChange = (newView) => {
+    setView(newView);
+  };
+
+  /**
+   * Renders the manga cards for the given list of mangas.
+   * @function
+   * @param {Array} mangas - The list of mangas to render.
+   * @returns {JSX.Element} The rendered manga cards.
+   */
+  const renderMangas = (mangas) => (
+    &lt;div className="profile__favorite-mangas">
+      {mangas.map((manga) => (
+        &lt;MangaCard
+          key={manga.id}
+          id={manga.id}
+          title={manga.title}
+          author={manga.authorName}
+          coverUrl={manga.coverUrl}
+          onClick={() => navigate(`/manga/${manga.id}`)}
+          onUpdateFavorites={updateFavorites}
+        />
+      ))}
+    &lt;/div>
+  );
+
+  /**
+   * Handles the profile image change.
+   * @function
+   * @param {Object} event - The event object.
+   */
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const img = new Image();
+      img.onload = () => {
+        if (img.width >= 500 &amp;&amp; img.height >= 500) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            setProfileImage(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          toast.error('Image must be at least 500x500 pixels', {
+            style: {
+              backgroundColor: '#003366',
+              color: '#E2E2B6',
+            },
+          });
+        }
+      };
+      img.src = URL.createObjectURL(file);
+    }
+  };
+
+  return (
+    &lt;div className="profile">
+      &lt;div className="profile__card">
+        &lt;div className="profile__left">
+          &lt;div className="profile__image-container">
+            &lt;img
+              src={profileImage}
+              alt="Profile Avatar"
+              className="profile__image"
+              style={{ width: '500px', height: '500px', cursor: 'pointer', objectFit: 'cover', objectPosition: 'center' }}
+              onClick={() => document.getElementById('profileImageInput').click()}
+            />
+            &lt;input
+              type="file"
+              accept="image/*"
+              id="profileImageInput"
+              style={{ display: 'none' }}
+              onChange={handleImageChange}
+            />
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="profile__right">
+          &lt;h1 className="profile__username">ElVaquilla&lt;/h1>
+          &lt;p className="profile__date">Fecha de embarque: 20-02-2024&lt;/p>
+          &lt;div className="profile__details-row">
+            &lt;div className="profile__detail-item">
+              &lt;span className="profile__label">Asiento&lt;/span>
+              &lt;span className="profile__value">10&lt;/span>
+            &lt;/div>
+            &lt;div className="profile__detail-item">
+              &lt;span className="profile__label">Manga favorito&lt;/span>
+              &lt;span className="profile__value">Oshi No Ko&lt;/span>
+            &lt;/div>
+            &lt;div className="profile__detail-item">
+              &lt;span className="profile__label">Plataforma&lt;/span>
+              &lt;span className="profile__value">4&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;p className="profile__manga-count">Mangas leídos: 777&lt;/p>
+        &lt;/div>
+        &lt;div className="profile__barcode">
+          &lt;span className="profile__barcode-text">Shibuya Station Code&lt;/span>
+        &lt;/div>
+      &lt;/div>
+      &lt;div className="profile__actions">
+        &lt;button className="profile__button" onClick={() => handleViewChange('pending')}>Pendiente&lt;/button>
+        &lt;button className="profile__button" onClick={() => handleViewChange('reading')}>Leyendo&lt;/button>
+        &lt;button className="profile__button" onClick={() => handleViewChange('completed')}>Terminados&lt;/button>
+        &lt;button className="profile__button" onClick={() => handleViewChange('favorites')}>Favoritos&lt;/button>
+      &lt;/div>
+      {view === 'favorites' &amp;&amp; (
+        &lt;div className="profile__favorite-mangas-container">
+          &lt;h2>Mangas Favoritos&lt;/h2>
+          {renderMangas(favoriteMangas)}
+        &lt;/div>
+      )}
+      {view === 'pending' &amp;&amp; (
+        &lt;div className="profile__favorite-mangas-container">
+          &lt;h2>Mangas Pendientes&lt;/h2>
+          {renderMangas(pendingMangas)}
+        &lt;/div>
+      )}
+      {view === 'reading' &amp;&amp; (
+        &lt;div className="profile__favorite-mangas-container">
+          &lt;h2>Mangas Leyendo&lt;/h2>
+          {renderMangas(readingMangas)}
+        &lt;/div>
+      )}
+      {view === 'completed' &amp;&amp; (
+        &lt;div className="profile__favorite-mangas-container">
+          &lt;h2>Mangas Terminados&lt;/h2>
+          {renderMangas(completedMangas)}
+        &lt;/div>
+      )}
+    &lt;/div>
+  );
+};
+
+export default Profile;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthorSearch">AuthorSearch</a></li><li><a href="global.html#Chapter">Chapter</a></li><li><a href="global.html#CloseSession">CloseSession</a></li><li><a href="global.html#Contact">Contact</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LayoutPublic">LayoutPublic</a></li><li><a href="global.html#Library">Library</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Manga">Manga</a></li><li><a href="global.html#MangaCard">MangaCard</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#PublicRoute">PublicRoute</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchBarLibrary">SearchBarLibrary</a></li><li><a href="global.html#UserContext">UserContext</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#auth">auth</a></li><li><a href="global.html#checkEmail">checkEmail</a></li><li><a href="global.html#checkName">checkName</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#handleLogout">handleLogout</a></li><li><a href="global.html#isUsserLogged">isUsserLogged</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#registro">registro</a></li><li><a href="global.html#useChapter">useChapter</a></li><li><a href="global.html#useMangaFilters">useMangaFilters</a></li><li><a href="global.html#useTagFilters">useTagFilters</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Dec 08 2024 04:16:29 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

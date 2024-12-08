@@ -1,40 +1,78 @@
-// Importación de las funciones necesarias del SDK de Firebase
-import { initializeApp } from "firebase/app"
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 
-// Configuración de Firebase utilizando variables de entorno para mayor seguridad
+/**
+ * Firebase configuration object.
+ * @constant
+ * @type {Object}
+ * @property {string} apiKey - The API key for Firebase.
+ * @property {string} authDomain - The authentication domain for Firebase.
+ * @property {string} projectId - The project ID for Firebase.
+ * @property {string} storageBucket - The storage bucket for Firebase.
+ * @property {string} messagingSenderId - The messaging sender ID for Firebase.
+ * @property {string} appId - The app ID for Firebase.
+ */
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_messagingSenderId,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
   appId: import.meta.env.VITE_FIREBASE_APPID
-}
+};
 
-// Inicialización de la app de Firebase
-const app = initializeApp(firebaseConfig)
+/**
+ * Initialize Firebase app.
+ * @constant
+ * @type {Object}
+ */
+const app = initializeApp(firebaseConfig);
 
-// Inicialización del servicio de autenticación
-export const auth = getAuth()
+/**
+ * Initialize Firebase Authentication service.
+ * @constant
+ * @type {Object}
+ */
+export const auth = getAuth();
 
-// Función para iniciar sesión
+/**
+ * Function to log in a user with email and password.
+ * @function
+ * @param {Object} param0 - The login credentials.
+ * @param {string} param0.email - The user's email.
+ * @param {string} param0.password - The user's password.
+ * @returns {Promise<Object>} The user credential object.
+ */
 export const login = ({ email, password }) => {
-  return signInWithEmailAndPassword(auth, email, password) // Utiliza el método de Firebase para autenticar con email y contraseña
-}
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
-// Función para registrar un nuevo usuario
+/**
+ * Function to register a new user.
+ * @async
+ * @function
+ * @param {Object} param0 - The registration details.
+ * @param {string} param0.username - The user's username.
+ * @param {string} param0.email - The user's email.
+ * @param {string} param0.password - The user's password.
+ * @returns {Promise<Object>} The user credential object.
+ * @throws Will throw an error if registration fails.
+ */
 export const registro = async ({ username, email, password }) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password) // Crea un nuevo usuario con email y contraseña
-    await updateProfile(userCredential.user, { displayName: username }) // Actualiza el perfil del usuario para incluir el nombre de usuario
-    console.log('Usuario registrado:', userCredential.user)
-    return userCredential 
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password); // Create a new user with email and password
+    await updateProfile(userCredential.user, { displayName: username }); // Update the user's profile to include the username
+    console.log('User registered:', userCredential.user);
+    return userCredential;
   } catch (error) {
-    console.error('Error al registrar usuario:', error) 
-    throw error 
+    console.error('Error registering user:', error);
+    throw error;
   }
-}
+};
 
-// Función para cerrar sesión
-export const logout = () => signOut(auth) // Cierra la sesión del usuario autenticado
+/**
+ * Function to log out the authenticated user.
+ * @function
+ * @returns {Promise<void>} A promise that resolves when the user is logged out.
+ */
+export const logout = () => signOut(auth);

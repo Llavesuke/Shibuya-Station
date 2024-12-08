@@ -1,231 +1,147 @@
-# Proyecto React con Firebase y Rutas Protegidas
 
-Este proyecto es una aplicación web construida con **React** y **Firebase**, que implementa rutas protegidas, autenticación de usuarios, y comunicación asíncrona para proporcionar una experiencia segura y optimizada. A continuación, se detalla la estructura del proyecto, las funcionalidades principales y cómo se ha integrado cada componente.
+# Proyecto Manga Library
 
----
+## Índice
 
-## Tabla de Contenidos
-- [Características](#características)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Integración de Firebase](#integración-de-firebase)
-- [Rutas Protegidas](#rutas-protegidas)
-- [Comunicación Asíncrona](#comunicación-asíncrona)
-- [Lazy Loading y Optimización](#lazy-loading-y-optimización)
-- [Próximos Pasos](#próximos-pasos)
+1. [Descripción de la Aplicación](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+2. [Pantallas y Funcionalidades](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+3. [Tecnologías Utilizadas](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+4. [Procedimientos de Instalación y Configuración](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+5. [Documentación del Código](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
+6. [Información Relevante](vscode-file://vscode-app/snap/code/176/usr/share/code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html)
 
----
+## Descripción de la Aplicación
 
-## Características
+Manga Library es una aplicación web que permite a los usuarios buscar, leer y gestionar mangas. Los usuarios pueden marcar mangas como favoritos, ver detalles de los mangas, y gestionar su lista de mangas pendientes, en lectura y completados.
 
-- Autenticación: Registro, inicio de sesión y cierre de sesión con Firebase.
-- Rutas protegidas: Acceso restringido basado en el estado de autenticación del usuario.
-- Lazy Loading: Carga de componentes bajo demanda para optimizar el rendimiento.
-- Gestión del estado global: Implementación de React.Context para manejar el estado del usuario.
-- Integración de API: Comunicación asíncrona con Firebase para autenticación y gestión de usuarios.
+## Pantallas y Funcionalidades
 
+### Pantallas
+
+* **Pantalla de Inicio** : Muestra una lista de mangas populares.
+* **Pantalla de Búsqueda** : Permite a los usuarios buscar mangas por título.
+* **Pantalla de Detalles del Manga** : Muestra información detallada sobre un manga específico.
+* **Pantalla de Perfil** : Permite a los usuarios ver y gestionar sus mangas favoritos, pendientes, en lectura y completados.
+* **Pantalla de Notificaciones** : Muestra notificaciones relevantes para el usuario.
+
+### Funcionalidades
+
+* **Búsqueda de Mangas** : Los usuarios pueden buscar mangas por título.
+* **Gestión de Favoritos** : Los usuarios pueden marcar mangas como favoritos.
+* **Gestión de Listas** : Los usuarios pueden gestionar sus listas de mangas pendientes, en lectura y completados.
+* **Perfil de Usuario** : Los usuarios pueden ver y actualizar su perfil, incluyendo la imagen de perfil.
+
+## Tecnologías Utilizadas
+
+* **React** : Biblioteca de JavaScript para construir interfaces de usuario.
+* **React Router** : Biblioteca para manejar la navegación en la aplicación.
+* **Axios** : Cliente HTTP para realizar solicitudes a la API de MangaDex.
+* **Firebase** : Plataforma para el backend, incluyendo autenticación y base de datos.
+* **Formik** : Biblioteca para manejar formularios en React.
+* **Yup** : Biblioteca para la validación de formularios.
+* **React Toastify** : Biblioteca para mostrar notificaciones.
+* **JSDoc** : Herramienta para generar documentación del código.
+
+## Procedimientos de Instalación y Configuración
+
+### Requisitos Previos
+
+* Node.js (versión 14 o superior)
+* npm (versión 6 o superior)
+
+### Instalación
+
+1. Clona el repositorio:
+
+   ```plaintext
+   https://github.com/Llavesuke/Shibuya-Station
+
+   cd Shibuya-Station
+   ```
+2. Instala las dependencias:
+
+   ```plaintext
+   npm install
+   ```
+3. Configura las variables de entorno: Crea un archivo `.env` en la raíz del proyecto y añade las siguientes variables:
+
+   ```plaintext
+
+   **VITE_FIREBASE_APIKEY=tu-api-key**
+
+   **VITE_FIREBASE_AUTHDOMAIN=tu-auth-domain**
+
+   **VITE_FIREBASE_PROJECTID=tu-project-id**
+
+   **VITE_FIREBASE_STORAGEBUCKET=tu-storage-bucket**
+
+   **VITE_FIREBASE_MESSAGINGSENDERID=tu-messaging-sende**r-id
+
+   **VITE_FIREBASE_APPID=tu-app-id**
+   ```
+
+### Ejecución
+
+Para iniciar la aplicación en modo desarrollo:
 
 ```plaintext
-src/
-├── components/         # Componentes reutilizables
-├── context/            # Contexto global para el estado del usuario
-│   └── userContext.js  # Proveedor del contexto del usuario
-├── layouts/            # Layouts para diseño y rutas protegidas
-│   ├── LayoutPublic.js # Diseño para rutas públicas
-│   ├── PublicRoute.js  # Componente para proteger rutas públicas
-│   └── PrivateRoute.js # Componente para proteger rutas privadas
-├── pages/              # Páginas de la aplicación
-│   ├── Home.js         # Página principal
-│   ├── Profile.js      # Página de perfil (ruta privada)
-│   ├── Login.js        # Página de inicio de sesión
-│   ├── Register.js     # Página de registro
-│   ├── Library.js      # Página de biblioteca
-│   ├── Contact.js      # Página de contacto
-│   └── NotFound.js     # Página 404
-├── config/             # Configuración de Firebase
-│   └── firebase.js     # Integración y configuración de Firebase
-├── router/             # Configuración de rutas
-│   └── index.js        # Enrutador principal
-└── App.js              # Componente raíz
+npm run dev
 ```
 
- ### Autenticacion con Firebase
- 
- Utilizo el SDK de Firebase para la implementación de este apartado.
- 
- 
- **Registro:**
-```javascript
- export const registro = async ({ username, email, password }) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    await updateProfile(userCredential.user, { displayName: username })
-    return userCredential
-}
+Para construir la aplicación para producción:
+
+```plaintext
+npm run build
 ```
 
+Para ejecutar la aplicación en modo producción:
 
- **Login**
- 
-```
- export const login = ({ email, password }) => {
-    return signInWithEmailAndPassword(auth, email, password)
-}
+```plaintext
+npm run serve
 ```
 
+## Documentación del Código
 
-Cierre de sesión
-```
-export const logout = () => signOut(auth)
-```
+La documentación del código se ha generado utilizando JSDoc. Puedes acceder a la documentación completa en el siguiente enlace:
 
- ### Protección de rutas.
- 
- Se quiere proteger las rutas de `/login` y `/register` para que cuando el usuario ya este autenticado, no permita la entrada a esas rutas.
- También si no se esta autenticado, no se debe poder acceder a `/profile` 
- 
- Para eso se llega a la siguiente solución:
- 
- ##### PublicRoute
- 
-```javascript
- if (user) {
-    return <Navigate to="/" />
-}
-return children
-```
- 
- ##### PrivateRoute
- 
-```javascript
- if (!user) {
-    return <Navigate to="/" />
-}
-return children
-```
+[Documentación Técnica Generada por JSDoc](./docs/index.html) 
 
- ### Comunicación asíncrona de la API
- 
- El componente Library implementa las siguientes funcionalidades principales:
+# Información Relevante
 
-- Integración con una API externa: Se conecta a la API de Mangadex (https://api.mangadex.org) para obtener datos de mangas, incluyendo títulos y portadas.
-
-- Paginación: Implementa paginación basada en el parámetro page en la URL. Se maneja el estado del número de página y la navegación entre páginas, actualizando dinámicamente el contenido mostrado.
-
-- Comunicación asíncrona: Utiliza axios para hacer solicitudes HTTP asíncronas a la API y maneja respuestas y errores.
-
-- Uso de parámetros en la URL: Usa el parámetro de búsqueda ?page en la URL para sincronizar la navegación y la carga de datos.
+* **API Utilizada** : La aplicación utiliza la API de MangaDex para obtener información sobre los mangas.
+* **Autenticación** : La autenticación de usuarios se maneja a través de Firebase Authentication.
+* **Almacenamiento de Datos** : Los datos de los usuarios, como listas de mangas favoritos, pendientes, en lectura y completados, se almacenan en `localStorage`.
 
 
- #### Flujo del Componente
-1. Estado inicial:
-
-- mangas: Contiene los datos de los mangas obtenidos desde la API.
-- currentPage: Rastrea la página actual.
-- totalMangas: Almacena el número total de mangas disponibles.
-- mangasPerPage: Define el número de mangas por página.
-
-2. Carga inicial y actualizaciones:
-
-Cuando el componente se monta o la URL cambia, se llama a fetchMangas para obtener datos de la API, basándose en el número de página obtenido de la URL.
-
-3. Paginación:
-
-Los botones Next y Previous permiten navegar entre páginas.
-La función navigate actualiza el parámetro ?page en la URL, sincronizando el estado de la aplicación con la interfaz.
- 
- 
-```javascript
-const fetchMangas = async (page) => {
-  const offset = (page - 1) * mangasPerPage; // Cálculo del desplazamiento
-  try {
-    const resp = await axios({
-      method: 'GET',
-      url: `${baseUrl}/manga`,
-      params: {
-        limit: mangasPerPage,
-        offset: offset,
-        includes: ['cover_art'],
-      },
-    });
-    setMangas(resp.data.data); // Actualiza los mangas en el estado
-    setTotalMangas(resp.data.total); // Actualiza el total de mangas disponibles
-  } catch (error) {
-    console.error('Error fetching mangas:', error); // Manejo de errores
-  }
-};
-```
-
-FetchMangas -> Maneja la comunicación con la API para obtener datos de mangas.
-
-```javascript
-const getPageFromUrl = () => {
-  const urlParams = new URLSearchParams(location.search);
-  const page = parseInt(urlParams.get('page'), 10);
-  return isNaN(page) ? 1 : page; // Página predeterminada es 1 si no hay un parámetro válido
-};
-```
-
-getPageFromUrl -> Obtiene el número de página desde la URL usando useLocation.
+# Reflexión
 
 
-```javascript
-const nextPage = () => {
-  if (currentPage < Math.ceil(totalMangas / mangasPerPage)) {
-    const newPage = currentPage + 1;
-    setCurrentPage(newPage);
-    navigate(`?page=${newPage}`); 
-    fetchMangas(newPage);
-  }
-};
-```
+## Introducción
 
-Controlan la navegación entre páginas, actualizando el estado y el parámetro en la URL.
+El desarrollo inicial del proyecto fue bastante caótico. Sin la guía del profesor en las primeras etapas, habría sido mucho más complicado sentar las bases necesarias para estructurar adecuadamente el proyecto. Una vez establecida esa base, el progreso se convirtió en una cuestión de dedicar tiempo y mantener una concentración constante durante largos períodos.
 
+Aunque el tiempo disponible fue justo, logré completar el proyecto justo a tiempo para la entrega. Trabajé casi todos los días en el desarrollo, y creo que, en términos de funcionalidad, he alcanzado el resultado esperado. Salvo algunos pequeños inconvenientes relacionados con la comodidad en la navegación, considero que el proyecto cumple con los objetivos planteados.
 
-```html
-<div className="pagination">
-  <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-  <span>Page {currentPage} of {Math.ceil(totalMangas / mangasPerPage)}</span>
-  <button
-    onClick={nextPage}
-    disabled={currentPage === Math.ceil(totalMangas / mangasPerPage)}
-  >
-    Next
-  </button>
-</div>
-```
+## Aprendizajes
 
-Paginación -> Incluye botones de navegación y muestra la página actual.
- 
- 
- #### Comunicación Asíncrona y API
- 
- Este componente demuestra una integración completa con una API REST:
+Este proyecto me ha permitido adquirir conocimientos fundamentales y prácticos que sin duda serán útiles en el futuro:
 
-- Petición GET: Se utilizan parámetros como limit y offset para controlar la paginación.
-- Manejo de errores: Uso de bloques try-catch para capturar y manejar errores de red o API.
-- Actualización dinámica: Almacena los datos obtenidos en el estado de React, actualizando la interfaz automáticamente.
+1. **Estructura de aplicaciones web:**Aprendí a organizar mejor una aplicación, dividiendo responsabilidades entre componentes y hooks, lo que mejoró tanto la eficiencia como la claridad del código.
+2. **Uso de APIs complejas:**Trabajé con la API de MangaDex, que es muy completa y versátil. Esto me obligó a explorar a fondo las opciones que ofrece, como parámetros de búsqueda, filtros avanzados, y tipos de retorno. Gracias a esto, ahora tengo un mejor manejo de APIs y puedo integrar sus funcionalidades de manera eficiente.
+3. **Firebase Authentication:**
+   Implementé un sistema de login y registro utilizando Firebase Authentication, lo que me permitió crear una funcionalidad avanzada y práctica que será muy valiosa en futuros proyectos.
 
+## Dificultades y Soluciones
 
-Aspectos Destacados
-- Sincronización con la URL: El componente utiliza useLocation y navigate para sincronizar la URL con el estado de la aplicación.
-- Eficiencia: Limita la cantidad de datos solicitados por página, optimizando el rendimiento.
+El desarrollo no estuvo exento de retos interesantes. Algunos de los principales desafíos que enfrenté fueron:
 
+1. **Manejo de la API con filtros y paginación:**Implementar filtros en las búsquedas y mantenerlos al navegar entre páginas fue complejo. Inicialmente, los filtros se perdían al cambiar de página, y si la página seleccionada estaba fuera del rango de resultados, se mostraba un contenido vacío.**Solución:** Decidí almacenar los datos de los filtros en la URL. Así, al cambiar de página, la aplicación recupera los filtros desde la URL y los utiliza para mostrar la página correspondiente con los filtros aplicados.
+2. **Desarrollo de notificaciones:**
+   Para informar al usuario sobre actualizaciones en sus lecturas, debía comprobar continuamente si la fecha de última actualización de un manga había cambiado. Sin embargo, esto requería llamadas recursivas a la API, lo que no era viable debido al límite de solicitudes impuesto por la API de MangaDex.
+   **Propuesta:** Diseñé un sistema para recuperar y analizar estos datos, pero no pude probarlo completamente debido a la dependencia de actualizaciones en la API. Aunque no llegué a implementarlo en su totalidad, fue una experiencia de aprendizaje valiosa.
 
- ### Lazyload
- 
- Se ha utilizado lazyload para aumentar el rendimiento inicial de la aplicación, la modificación se ha realizado en `index.jsx`
- 
-```javascript
+## Conclusión
 
-// Lazy-loads
-const Library = lazy(() => import("../pages/Library"))
-const Login = lazy(() => import("../pages/Login"))
-const Register = lazy(() => import("../pages/Register"))
-const Notifications = lazy(() => import("../pages/Notifications"))
-const Profile = lazy(() => import("../pages/Profile"))
-const NotFound = lazy(() => import("../pages/NotFound"))
-const Contact = lazy(() => import("../pages/Contact"))
-```
+El proyecto ha sido una experiencia enriquecedora. He mejorado mis habilidades técnicas y adquirido un entendimiento más profundo de cómo desarrollar aplicaciones web funcionales y bien estructuradas. Aunque el tiempo fue ajustado y no todo se pudo implementar como deseaba, el resultado es satisfactorio y cumple con los objetivos principales del proyecto.
 
- 
-  
+Este trabajo no solo me ha ayudado a mejorar mis conocimientos actuales, sino que también me ha preparado para abordar desafíos más complejos en el futuro.

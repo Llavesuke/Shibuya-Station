@@ -295,6 +295,8 @@ html, body {
 }
 
 
+
+
 /* Estilos para los enlaces de navegación */
 .navbar__link {
   display: flex;
@@ -541,10 +543,19 @@ li {
 
 /* HOME */
 
+.home-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
 .home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
-  height: 100vh; /* La sección ocupa toda la pantalla */
 }
 
 .home__banner {
@@ -556,7 +567,7 @@ li {
 .home__title {
   position: absolute; /* Posiciona el texto sobre la imagen */
   font-family: 'Anton', sans-serif;
-  top: 50%; /* Centra el texto verticalmente */
+  top: 25%; /* Centra el texto verticalmente */
   left: 50%; /* Centra el texto horizontalmente */
   transform: translate(-50%, -50%); /* Ajusta el texto para un centrado perfecto */
   color: #E6E6BF; /* Aplica el color del texto */
@@ -565,21 +576,21 @@ li {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Mejora la legibilidad */
   z-index: 1; /* Coloca el texto encima de la imagen */
 }
-
+/* 
 .home__placeholder {
   position: absolute;
-  bottom: 20%; /* Coloca el recuadro cerca de la parte inferior */
-  left: 50%; /* Centra horizontalmente */
-  transform: translateX(-50%); /* Asegura que se centre */
+  bottom: 20%; 
+  left: 50%;
+  transform: translateX(-50%); 
   padding: 1rem 2rem;
   font-family: 'Arial', sans-serif;
   font-size: 1.5rem;
   color: #FFFFFF;
-  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con transparencia */
-  border: 2px solid #E6E6BF; /* Borde en color */
-  border-radius: 8px; /* Bordes redondeados */
+  background-color: rgba(0, 0, 0, 0.7); 
+  border: 2px solid #E6E6BF;
+  border-radius: 8px; 
   text-align: center;
-}
+} */
 
 .home__bottom {
   position: relative;
@@ -589,6 +600,7 @@ li {
   align-items: center;
   padding: 40px 0; /* Aumenta el espacio entre los elementos */
   z-index: 2; /* Asegura que esté encima de la imagen */
+  margin-top: auto; /* Empuja el contenido hacia abajo */
 }
 
 .home__info-box {
@@ -650,7 +662,6 @@ li {
   background-size: cover;
   background-position: center;
 }
-
 
 .box-content__text {
   font-size: 4rem;
@@ -1057,4 +1068,377 @@ li {
   .library-search-bar {
     width: 100%;
   }
+}
+
+
+/* PROFILE PAGE */
+
+/* General styling for the profile page */
+.profile {
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 0 auto;
+  height: 95vh; /* Ocupa el 95% del alto de la página */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribución vertical */
+  box-sizing: border-box;
+}
+
+/* Profile card (static size maintained) */
+.profile__card {
+  background-color: #0d2c54;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  gap: 20px;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+/* Left section (image) */
+.profile__left {
+  flex-shrink: 0;
+}
+
+.profile__image-container {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 120px;
+  height: 160px;
+}
+
+.profile__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right section (details) */
+.profile__right {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile__username {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile__date {
+  font-size: 0.9rem;
+  color: #a0c4ff;
+  margin: 0;
+}
+
+/* Details row for seat, manga, and platform */
+.profile__details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px;
+  flex-wrap: wrap; /* Permite que los elementos pasen a una nueva línea en pantallas pequeñas */
+}
+
+.profile__detail-item {
+  text-align: center;
+  flex: 1; /* Asegura un espacio igual entre los elementos */
+  min-width: 100px; /* Evita que sean demasiado pequeños en pantallas pequeñas */
+}
+
+.profile__label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.profile__value {
+  font-size: 1rem;
+  color: #ffd700;
+}
+
+.profile__manga-count {
+  font-size: 0.9rem;
+  color: #a0c4ff;
+}
+
+/* Barcode styling */
+.profile__barcode {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  text-align: center;
+  color: #a0c4ff;
+  font-size: 0.9rem;
+}
+
+/* Favorite mangas styling */
+.profile__favorite-mangas-container {
+  margin-top: 20px;
+  text-align: center; /* Centra la cuadrícula horizontalmente */
+}
+
+.profile__favorite-mangas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 mangas por fila en pantallas grandes */
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Action buttons */
+.profile__actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Ajusta los botones en pantallas pequeñas */
+  gap: 10px;
+}
+
+.profile__button {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.profile__button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Styles */
+
+/* Tablets and smaller */
+@media (max-width: 768px) {
+  .profile__card {
+    flex-direction: column; /* Pasa a una columna */
+    align-items: center; /* Centra los elementos */
+    text-align: center;
+  }
+
+  .profile__details-row {
+    flex-direction: column; /* Alinea los detalles verticalmente */
+    align-items: center;
+  }
+
+  .profile__detail-item {
+    margin-bottom: 10px; /* Agrega espacio entre elementos */
+  }
+
+  .profile__barcode {
+    position: static; /* No es absoluto en pantallas pequeñas */
+    margin-top: 20px;
+  }
+
+  .profile__favorite-mangas {
+    grid-template-columns: repeat(2, 1fr); /* 2 mangas por fila */
+  }
+}
+
+/* Mobile and smaller */
+@media (max-width: 480px) {
+  .profile {
+    padding: 10px; /* Reduce el padding */
+  }
+
+  .profile__image-container {
+    width: 100px;
+    height: 140px;
+  }
+
+  .profile__username {
+    font-size: 1.2rem;
+  }
+
+  .profile__favorite-mangas {
+    grid-template-columns: 1fr; /* 1 manga por fila */
+  }
+
+  .profile__actions {
+    flex-direction: column; /* Botones apilados */
+    align-items: center;
+  }
+
+  .profile__button {
+    width: 100%; /* Los botones ocupan todo el ancho */
+    max-width: 300px;
+  }
+}
+
+
+/* NOTIFICATIONS */
+
+.notifications {
+  padding: 20px;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.notification__cover {
+  width: 50px;
+  height: 75px;
+  margin-right: 10px;
+}
+
+.notification__details {
+  flex: 1;
+}
+
+.notification__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.notification__message {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+
+/* FOOTER */
+
+.footer {
+  background-color: #002347;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: 4rem; 
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* CONTACT PAGE */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
+/* Form styling */
+form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 30px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Label styles */
+form label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* Input and textarea styles */
+form input,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s ease-in-out;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Error message styles */
+form div > div {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Button styles */
+form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+form button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+
+/* Estilos del layout principal */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que la altura del contenedor ocupe toda la ventana */
+}
+
+/* Contenido principal */
+.content {
+  flex: 1; /* Hace que el contenido principal ocupe todo el espacio disponible */
+}
+
+/* Footer */
+footer {
+  background-color: #002347;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box; /* Asegura que el padding no afecta al ancho del footer */
 }

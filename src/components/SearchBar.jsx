@@ -3,17 +3,34 @@ import axios from 'axios';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * SearchBar component that allows users to search for manga.
+ * @component
+ * @param {Object} props - The props object.
+ * @param {Function} props.onSearchResults - Function to handle the search results.
+ * @returns {JSX.Element} The SearchBar component.
+ */
 const SearchBar = ({ onSearchResults }) => {
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [query, setQuery] = useState(''); // State to manage the search query
+  const [loading, setLoading] = useState(false); // State to manage the loading state
+  const [results, setResults] = useState([]); // State to manage the search results
+  const [error, setError] = useState(null); // State to manage any errors
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  /**
+   * Handles the change event on the search input.
+   * @param {Object} event - The event object.
+   */
   const handleChange = (event) => {
     setQuery(event.target.value);
   };
 
+  /**
+   * Fetches search results from the API based on the query.
+   * @async
+   * @function
+   * @param {string} query - The search query.
+   */
   const fetchResults = async (query) => {
     setLoading(true);
     setError(null);
@@ -78,9 +95,12 @@ const SearchBar = ({ onSearchResults }) => {
     return () => clearTimeout(timer); 
   }, [query, onSearchResults]);
 
+  /**
+   * Handles the click event on a search result.
+   * @param {string} mangaId - The ID of the selected manga.
+   */
   const handleResultClick = (mangaId) => {
     navigate(`/manga/${mangaId}`);
-    
     setQuery('');
   };
 

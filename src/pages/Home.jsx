@@ -3,6 +3,11 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MangaCard from '../components/MangaCard';
 
+/**
+ * Home component that displays the homepage with popular mangas.
+ * @component
+ * @returns {JSX.Element} The Home component.
+ */
 const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +18,12 @@ const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  /**
+   * Fetches popular mangas from the API.
+   * @async
+   * @function
+   * @param {number} page - The page number to fetch.
+   */
   const fetchPopularMangas = async (page) => {
     const offset = (page - 1) * mangasPerPage;
     try {
@@ -33,6 +44,11 @@ const Home = () => {
     }
   };
 
+  /**
+   * Extracts the page number from the URL.
+   * @function
+   * @returns {number} The page number.
+   */
   const getPageFromUrl = () => {
     const urlParams = new URLSearchParams(location.search);
     const page = parseInt(urlParams.get('page'), 10);
@@ -45,65 +61,56 @@ const Home = () => {
     fetchPopularMangas(pageFromUrl);
   }, [location]);
 
+  /**
+   * Handles the click event on a manga card.
+   * @function
+   * @param {string} mangaId - The ID of the clicked manga.
+   */
   const handleCardClick = (mangaId) => {
     navigate(`/manga/${mangaId}`);
   };
 
   return (
-    <div className="home">
-      <img className="home__banner" src="banner-home.png" alt="imagen manga de Shibuya" />
-      <h1 className="home__title">WELCOME TO SHIBUYA</h1>
-      <div className="home__placeholder">ES HORA DE SUBIRTE AL TREN</div>
-
-      <div className="home__bottom">
-        <div className="home__info-box">¡Saliendo de la estación!</div>
-        <button className="home__button">Popular</button>
-      </div>
-
-      {error && <div className="error-message">{error}</div>}
-
-      <div className="home__popular-mangas">
-        <div className="library__grid">
-          {popularMangas.map((manga) => {
-            const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
-            const author = manga.relationships?.find((rel) => rel.type === 'author');
-            
-            const coverUrl = cover
-              ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-              : 'https://via.placeholder.com/150';
-
-            const authorName = author ? author.attributes?.name : 'Unknown Author';
-            
-            // Check for the title in English (or fallback to Japanese, then a default value)
-            const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
-
-            return (
-              <MangaCard
-                key={manga.id}
-                id={manga.id}
-                title={title}
-                author={authorName}
-                coverUrl={coverUrl}
-                onClick={handleCardClick}
-              />
-            );
-          })}
+    <div className="home-container">
+      <div className="home">
+        <img className="home__banner" src="banner-home.png" alt="imagen manga de Shibuya" />
+        <h1 className="home__title">WELCOME TO SHIBUYA</h1>
+        
+        <div className="home__bottom">
+          <div className="home__info-box">¡Saliendo de la estación!</div>
+          <button className="home__button">Popular</button>
         </div>
-      </div>
 
-      <div className="home__box-content">
-        <img
-          className="box-content__image"
-          src="isagi-block.png"
-          alt="Yoichi Isagi falling manga draw"
-        />
-        <p className="box-content__text">
-          Una <span>experiencia como </span> nunca antes
-        </p>
-      </div>
+        {error && <div className="error-message">{error}</div>}
 
-      <div className="home__bottom">
-        <button className="home__button">Popular</button>
+        <div className="home__popular-mangas">
+          <div className="library__grid">
+            {popularMangas.map((manga) => {
+              const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
+              const author = manga.relationships?.find((rel) => rel.type === 'author');
+              
+              const coverUrl = cover
+                ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
+                : 'https://via.placeholder.com/150';
+
+              const authorName = author ? author.attributes?.name : 'Unknown Author';
+              
+              // Check for the title in English (or fallback to Japanese, then a default value)
+              const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
+
+              return (
+                <MangaCard
+                  key={manga.id}
+                  id={manga.id}
+                  title={title}
+                  author={authorName}
+                  coverUrl={coverUrl}
+                  onClick={handleCardClick}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

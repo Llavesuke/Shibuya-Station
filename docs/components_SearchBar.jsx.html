@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SearchBar.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SearchBar.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FaSearch } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+/**
+ * SearchBar component that allows users to search for manga.
+ * @component
+ * @param {Object} props - The props object.
+ * @param {Function} props.onSearchResults - Function to handle the search results.
+ * @returns {JSX.Element} The SearchBar component.
+ */
+const SearchBar = ({ onSearchResults }) => {
+  const [query, setQuery] = useState(''); // State to manage the search query
+  const [loading, setLoading] = useState(false); // State to manage the loading state
+  const [results, setResults] = useState([]); // State to manage the search results
+  const [error, setError] = useState(null); // State to manage any errors
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
+  /**
+   * Handles the change event on the search input.
+   * @param {Object} event - The event object.
+   */
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
+  /**
+   * Fetches search results from the API based on the query.
+   * @async
+   * @function
+   * @param {string} query - The search query.
+   */
+  const fetchResults = async (query) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get('https://api.mangadex.org/manga', {
+        params: {
+          title: query,
+          limit: 20,
+        },
+      });
+
+      if (!response.data || !response.data.data) {
+        throw new Error('No data received from the API');
+      }
+
+      const newResults = response.data.data || [];
+      if (newResults.length === 0) {
+        setError('No results found');
+        setResults([]);
+        onSearchResults([]);
+        return;
+      }
+
+      const formattedResults = newResults.map((manga) => {
+        const cover = manga.relationships.find((rel) => rel.type === 'cover_art');
+        const coverUrl = cover &amp;&amp; cover.attributes
+          ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.file_name}`
+          : null;
+
+        const title = manga.attributes.title.en || manga.attributes.title.ja || 'No title available';
+
+        return {
+          id: manga.id,
+          title,
+          cover_url: coverUrl,
+        };
+      });
+
+      setResults(formattedResults);
+      onSearchResults(formattedResults);
+
+    } catch (error) {
+      setError(`An error occurred: ${error.response?.data?.message || error.message}`);
+      console.error('Error fetching manga data:', error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (query.trim() === '') {
+      setResults([]);
+      onSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      fetchResults(query);
+    }, 500);
+
+    return () => clearTimeout(timer); 
+  }, [query, onSearchResults]);
+
+  /**
+   * Handles the click event on a search result.
+   * @param {string} mangaId - The ID of the selected manga.
+   */
+  const handleResultClick = (mangaId) => {
+    navigate(`/manga/${mangaId}`);
+    setQuery('');
+  };
+
+  return (
+    &lt;div className="search-bar-container">
+      &lt;div className="search-bar">
+        &lt;FaSearch className="search-bar__icon" />
+        &lt;input
+          type="text"
+          placeholder="Search Manga..."
+          value={query}
+          onChange={handleChange}
+          className="search-bar__input"
+        />
+      &lt;/div>
+
+      {query &amp;&amp; (
+        &lt;div className="search-results">
+          {loading ? (
+            &lt;p>Searching...&lt;/p>
+          ) : error ? (
+            &lt;p>{error}&lt;/p>
+          ) : results.length > 0 ? (
+            results.map((manga) => (
+              &lt;div
+                key={manga.id}
+                className="search-result-item"
+                onClick={() => handleResultClick(manga.id)} 
+              >
+                {manga.cover_url &amp;&amp; (
+                  &lt;img
+                    src={manga.cover_url}
+                    alt={manga.title}
+                    className="search-result-cover"
+                  />
+                )}
+                &lt;span>{manga.title}&lt;/span>
+              &lt;/div>
+            ))
+          ) : (
+            &lt;p>No results found&lt;/p>
+          )}
+        &lt;/div>
+      )}
+    &lt;/div>
+  );
+};
+
+export default SearchBar;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AuthorSearch">AuthorSearch</a></li><li><a href="global.html#Chapter">Chapter</a></li><li><a href="global.html#CloseSession">CloseSession</a></li><li><a href="global.html#Contact">Contact</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LayoutPublic">LayoutPublic</a></li><li><a href="global.html#Library">Library</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Manga">Manga</a></li><li><a href="global.html#MangaCard">MangaCard</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#PublicRoute">PublicRoute</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchBarLibrary">SearchBarLibrary</a></li><li><a href="global.html#UserContext">UserContext</a></li><li><a href="global.html#UserProvider">UserProvider</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#auth">auth</a></li><li><a href="global.html#checkEmail">checkEmail</a></li><li><a href="global.html#checkName">checkName</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#handleLogout">handleLogout</a></li><li><a href="global.html#isUsserLogged">isUsserLogged</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#registro">registro</a></li><li><a href="global.html#useChapter">useChapter</a></li><li><a href="global.html#useMangaFilters">useMangaFilters</a></li><li><a href="global.html#useTagFilters">useTagFilters</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Dec 08 2024 04:16:29 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
