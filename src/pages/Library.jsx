@@ -90,7 +90,7 @@ const Library = () => {
    * @function
    */
   const nextPage = () => {
-    if (currentPage < Math.ceil(totalMangas / 15)) {
+    if (currentPage < Math.ceil(totalMangas / mangasPerPage)) {
       const urlParams = new URLSearchParams(location.search);
       urlParams.set('page', currentPage + 1);
       navigate(`?${urlParams.toString()}`);

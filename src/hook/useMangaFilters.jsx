@@ -72,15 +72,14 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
   
     try {
-      // Cambia la URL para que apunte a tu proxy en lugar de la API de MangaDex
       const resp = await axios.get(`/api/mangaProxy`, { params: filters });
-  
       setMangas(resp.data.data || []);
       setTotalMangas(resp.data.total || 0);
     } catch (error) {
       console.error('Error fetching mangas:', error);
     }
   };
+  
   
 
   /**
