@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+const baseUrl = 'https://api.mangadex.org';
 const mangasPerPage = 15;
 
 /**
@@ -30,7 +32,6 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const getParamsFromUrl = () => {
     const urlParams = new URLSearchParams(location.search);
     return {
-      page: parseInt(urlParams.get('page'), 10) || 1,
       query: urlParams.get('query') || '',
       authorUUID: urlParams.get('authorUUID') || '',
       status: urlParams.get('status') || '',
@@ -38,8 +39,33 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
       excludedTags: urlParams.getAll('excludedTags[]'),
       demographic: urlParams.get('demographic') || '',
       contentRating: urlParams.get('contentRating') || '',
-      sortOrder: urlParams.get('sortOrder') || 'rating',
+      sortOrder: {
+        rating: urlParams.get('order[rating]') || 'desc',
+        followedCount: urlParams.get('order[followedCount]') || 'desc',
+      },
     };
+  };
+
+  /**
+   * Fetches tag UUIDs based on tag names.
+   * @async
+   * @function
+   * @param {Array} tags - The list of tag names.
+   * @returns {Array} The list of tag UUIDs.
+   */
+  const fetchTagUUIDs = async (tags) => {
+    if (!tags || tags.length === 0) return [];
+    try {
+      const response = await axios.get(`${proxyUrl}${baseUrl}/tag`);
+      const allTags = response.data.data;
+      return tags.map(tag => {
+        const foundTag = allTags.find(t => t.attributes.name.en === tag || t.attributes.name.ja === tag);
+        return foundTag ? foundTag.id : null;
+      }).filter(tag => tag !== null);
+    } catch (error) {
+      console.error('Error fetching tag UUIDs:', error);
+      return [];
+    }
   };
 
   /**
@@ -51,10 +77,10 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const fetchMangas = async (page) => {
     const { query, authorUUID, status, includedTags, excludedTags, demographic, contentRating, sortOrder } = getParamsFromUrl();
     const offset = (page - 1) * mangasPerPage;
-  
+
     const includedTagUUIDs = await fetchTagUUIDs(includedTags);
     const excludedTagUUIDs = await fetchTagUUIDs(excludedTags);
-  
+
     const filters = {
       title: query || undefined,
       authors: authorUUID ? [authorUUID] : undefined,
@@ -69,36 +95,14 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
       'order[followedCount]': sortOrder.followedCount,
       includes: ['cover_art', 'author'],
     };
-  
+
     try {
-      // Realizar solicitud directamente a la API de MangaDex (sin usar proxy)
-      const resp = await axios.get('/api/manga', { params: filters });  // Reemplazamos '/api/mangaProxy'
-      setMangas(resp.data.data || []);
-      setTotalMangas(resp.data.total || 0);
+      const response = await axios.get(`${proxyUrl}${baseUrl}/manga`, { params: filters });
+      const mangas = response.data.data;
+      setMangas(mangas);
+      setTotalMangas(response.data.total);
     } catch (error) {
       console.error('Error fetching mangas:', error);
-    }
-  };
-
-  /**
-   * Fetches UUIDs for the given tag names.
-   * @async
-   * @function
-   * @param {string[]} tagNames - The names of the tags to fetch UUIDs for.
-   * @returns {Promise<string[]>} The UUIDs of the tags.
-   */
-  const fetchTagUUIDs = async (tagNames) => {
-    try {
-      const response = await axios.get('/api/manga/tags');
-      const tagsData = response.data.data;
-  
-      return tagNames.map((tagName) => {
-        const tag = tagsData.find((t) => t.attributes.name.en === tagName);
-        return tag ? tag.id : null;
-      }).filter((id) => id); // Filtramos los tags no encontrados
-    } catch (error) {
-      console.error('Error fetching tags:', error);
-      return [];
     }
   };
 
@@ -107,24 +111,10 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   }, [location]);
 
   return {
-    query,
-    setQuery,
-    authorUUID,
-    setAuthorUUID,
-    status,
-    setStatus,
-    includedTags,
-    setIncludedTags,
-    excludedTags,
-    setExcludedTags,
-    demographic,
-    setDemographic,
-    contentRating,
-    setContentRating,
-    sortOrder,
-    setSortOrder,
-    authorSuggestions,
-    setAuthorSuggestions,
+    query, setQuery, authorUUID, setAuthorUUID, status, setStatus,
+    includedTags, setIncludedTags, excludedTags, setExcludedTags,
+    demographic, setDemographic, contentRating, setContentRating,
+    sortOrder, setSortOrder, authorSuggestions, setAuthorSuggestions,
     fetchMangas
   };
 };

@@ -84,20 +84,18 @@ const Library = () => {
     urlParams.set('page', 1); // Reset the page to 1
     navigate(`?${urlParams.toString()}`);
   };
-  
 
   /**
    * Handles pagination to the next page.
    * @function
    */
   const nextPage = () => {
-    if (currentPage < Math.ceil(totalMangas / mangasPerPage)) {
+    if (currentPage < Math.ceil(totalMangas / 15)) {
       const urlParams = new URLSearchParams(location.search);
       urlParams.set('page', currentPage + 1);
       navigate(`?${urlParams.toString()}`);
     }
   };
-  
 
   /**
    * Handles pagination to the previous page.
@@ -138,9 +136,8 @@ const Library = () => {
           const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
           const author = manga.relationships?.find((rel) => rel.type === 'author');
           const coverUrl = cover?.attributes?.fileName
-  ? `/api/proxy?imageUrl=${encodeURIComponent(`https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`)}`
-  : 'https://via.placeholder.com/150';
-
+            ? `https://cors-anywhere.herokuapp.com/https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
+            : 'https://via.placeholder.com/150';
 
           const authorName = author?.attributes?.name || 'Unknown Author';
           const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
