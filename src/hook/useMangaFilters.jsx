@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const baseUrl = '/api/proxy';
+const baseUrl = 'https://api.mangadex.org';
 const mangasPerPage = 15;
 
 /**
@@ -23,7 +23,6 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const [contentRating, setContentRating] = useState(''); // State to manage the content rating filter
   const [sortOrder, setSortOrder] = useState({ rating: 'desc', followedCount: 'desc' }); // State to manage the sort order
   const [authorSuggestions, setAuthorSuggestions] = useState([]); // State to manage author suggestions
-  const [error, setError] = useState(null); // State to manage errors
 
   /**
    * Extracts filter parameters from the URL.
@@ -73,16 +72,15 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
   
     try {
-      // Usando CORS Anywhere como proxy
-      const resp = await axios.get(`${baseUrl}/manga`, { params: filters });
+      const resp = await axios.get(`/api/mangaProxy`, { params: filters });
       setMangas(resp.data.data || []);
       setTotalMangas(resp.data.total || 0);
-      setError(null); // Limpiamos cualquier error anterior
     } catch (error) {
       console.error('Error fetching mangas:', error);
-      setError('Failed to load manga data'); // Establecer el error
     }
   };
+  
+  
 
   /**
    * Fetches UUIDs for the given tag names.
@@ -93,7 +91,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
    */
   const fetchTagUUIDs = async (tagNames) => {
     try {
-      const response = await axios.get(`${baseUrl}/tag`);
+      const response = await axios.get(`/api/mangaProxy/tags`);
       const tagsData = response.data.data;
   
       return tagNames.map((tagName) => {
@@ -105,14 +103,11 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
       return [];
     }
   };
+  
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchMangas(currentPage);
-    };
-
-    fetchData();
-  }, [currentPage, query, authorUUID, status, includedTags, excludedTags, demographic, contentRating, sortOrder]);
+    fetchMangas(currentPage);
+  }, [location]);
 
   return {
     query,
@@ -133,8 +128,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     setSortOrder,
     authorSuggestions,
     setAuthorSuggestions,
-    fetchMangas,
-    error // Devuelve el error para manejarlo en el componente
+    fetchMangas
   };
 };
 
