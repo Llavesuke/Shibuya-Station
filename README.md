@@ -1,5 +1,5 @@
 
-# Proyecto Manga Library
+# Shibuya Station
 
 ## Índice
 
@@ -12,7 +12,7 @@
 
 ## Descripción de la Aplicación
 
-Manga Library es una aplicación web que permite a los usuarios buscar, leer y gestionar mangas. Los usuarios pueden marcar mangas como favoritos, ver detalles de los mangas, y gestionar su lista de mangas pendientes, en lectura y completados.
+Shibuya Station es una aplicación web que permite a los usuarios buscar, leer y gestionar mangas. Los usuarios pueden marcar mangas como favoritos, ver detalles de los mangas, y gestionar su lista de mangas pendientes, en lectura y completados.
 
 ## Pantallas y Funcionalidades
 
