@@ -84,6 +84,7 @@ const Library = () => {
     urlParams.set('page', 1); // Reset the page to 1
     navigate(`?${urlParams.toString()}`);
   };
+  
 
   /**
    * Handles pagination to the next page.
@@ -96,6 +97,7 @@ const Library = () => {
       navigate(`?${urlParams.toString()}`);
     }
   };
+  
 
   /**
    * Handles pagination to the previous page.
@@ -138,6 +140,7 @@ const Library = () => {
           const coverUrl = cover?.attributes?.fileName
   ? `/api/proxy?imageUrl=${encodeURIComponent(`https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`)}`
   : 'https://via.placeholder.com/150';
+
 
           const authorName = author?.attributes?.name || 'Unknown Author';
           const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
