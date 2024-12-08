@@ -72,7 +72,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
   
     try {
-      const resp = await axios.get(`/api/mangaProxy`, { params: filters });
+      const resp = await axios.get(`/api/mangaProxy/manga`, { params: filters });
       setMangas(resp.data.data || []);
       setTotalMangas(resp.data.total || 0);
     } catch (error) {
@@ -91,7 +91,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
    */
   const fetchTagUUIDs = async (tagNames) => {
     try {
-      const response = await axios.get(`/api/mangaProxy/tags`);
+      const response = await axios.get(`/api/mangaProxy/tag`);
       const tagsData = response.data.data;
   
       return tagNames.map((tagName) => {
