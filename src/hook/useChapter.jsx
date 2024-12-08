@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+/**
+ * Custom hook to fetch and manage chapter data.
+ * @function
+ * @param {string} chapterId - The ID of the chapter to fetch.
+ * @returns {Object} The chapter data and related state management functions.
+ */
 const useChapter = (chapterId) => {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,22 +18,21 @@ const useChapter = (chapterId) => {
   useEffect(() => {
     const fetchChapterDetails = async () => {
       try {
-        // Obtener los detalles del capítulo
+        // Fetch chapter details
         const chapterResponse = await axios.get(`https://api.mangadex.org/chapter/${chapterId}`);
         const chapterData = chapterResponse.data.data;
         const title = chapterData.attributes.title || null;
         setChapterTitle(title);
 
-        // Obtener el ID del manga relacionado
+        // Fetch related manga title
         const mangaId = chapterData.relationships.find((rel) => rel.type === 'manga')?.id;
         if (mangaId) {
-          // Obtener el título del manga
           const mangaResponse = await axios.get(`https://api.mangadex.org/manga/${mangaId}`);
           const mangaData = mangaResponse.data.data;
-          setMangaTitle(mangaData.attributes.title.en || 'Título desconocido');
+          setMangaTitle(mangaData.attributes.title.en || 'Unknown Title');
         }
 
-        // Obtener las páginas del capítulo
+        // Fetch chapter pages
         const pagesResponse = await axios.get(`https://api.mangadex.org/at-home/server/${chapterId}`);
         const { baseUrl, chapter } = pagesResponse.data;
         const imageUrls = chapter.data.map(
@@ -37,7 +42,7 @@ const useChapter = (chapterId) => {
         setPages(imageUrls);
       } catch (err) {
         console.error('Error fetching chapter details or pages:', err);
-        setError('No se pudo cargar el capítulo.');
+        setError('Failed to load chapter.');
       } finally {
         setLoading(false);
       }

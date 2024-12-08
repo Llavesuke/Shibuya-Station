@@ -2,6 +2,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import useChapter from '../hook/useChapter';
 
+/**
+ * Chapter component that displays a manga chapter with navigation.
+ * @component
+ * @returns {JSX.Element} The Chapter component.
+ */
 const Chapter = () => {
   const { chapterId } = useParams();
   const {
@@ -14,12 +19,20 @@ const Chapter = () => {
     mangaTitle,
   } = useChapter(chapterId);
 
+  /**
+   * Navigates to the next page.
+   * @function
+   */
   const goToNextPage = () => {
     if (currentPage < pages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
 
+  /**
+   * Navigates to the previous page.
+   * @function
+   */
   const goToPreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
@@ -27,7 +40,7 @@ const Chapter = () => {
   };
 
   if (loading) {
-    return <div className="loading">Cargando...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (error) {
@@ -35,7 +48,7 @@ const Chapter = () => {
   }
 
   if (pages.length === 0) {
-    return <div className="no-pages">No hay páginas disponibles para este capítulo.</div>;
+    return <div className="no-pages">No pages available for this chapter.</div>;
   }
 
   return (
@@ -44,7 +57,7 @@ const Chapter = () => {
       <div className="chapter-page-container">
         <img
           src={pages[currentPage]}
-          alt={`Página ${currentPage + 1}`}
+          alt={`Page ${currentPage + 1}`}
           className="chapter-page"
         />
       </div>
