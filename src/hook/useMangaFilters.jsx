@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const baseUrl = 'https://api.mangadex.org';
+const baseUrl = '/api'; // Usar el proxy configurado en Vercel
 const mangasPerPage = 15;
 
 /**
@@ -57,7 +56,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const fetchTagUUIDs = async (tags) => {
     if (!tags || tags.length === 0) return [];
     try {
-      const response = await axios.get(`${proxyUrl}${baseUrl}/tag`);
+      const response = await axios.get(`${baseUrl}/tag`);
       const allTags = response.data.data;
       return tags.map(tag => {
         const foundTag = allTags.find(t => t.attributes.name.en === tag || t.attributes.name.ja === tag);
@@ -98,7 +97,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
 
     try {
-      const response = await axios.get(`${proxyUrl}${baseUrl}/manga`, { params: filters });
+      const response = await axios.get(`${baseUrl}/manga`, { params: filters });
       const mangas = response.data.data;
       setMangas(mangas);
       setTotalMangas(response.data.total);
