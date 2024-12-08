@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const baseUrl = 'https://api.mangadex.org';
 const mangasPerPage = 15;
 
 /**
@@ -72,15 +71,14 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
   
     try {
-      const resp = await axios.get(`/api/mangaProxy`, { params: filters });
+      // Realizar solicitud directamente a la API de MangaDex (sin usar proxy)
+      const resp = await axios.get('/api/manga', { params: filters });  // Reemplazamos '/api/mangaProxy'
       setMangas(resp.data.data || []);
       setTotalMangas(resp.data.total || 0);
     } catch (error) {
       console.error('Error fetching mangas:', error);
     }
   };
-  
-  
 
   /**
    * Fetches UUIDs for the given tag names.
@@ -91,7 +89,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
    */
   const fetchTagUUIDs = async (tagNames) => {
     try {
-      const response = await axios.get(`/api/mangaProxy/tags`);
+      const response = await axios.get('/api/manga/tags');
       const tagsData = response.data.data;
   
       return tagNames.map((tagName) => {
@@ -103,7 +101,6 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
       return [];
     }
   };
-  
 
   useEffect(() => {
     fetchMangas(currentPage);
