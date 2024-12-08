@@ -94,12 +94,6 @@ Para construir la aplicación para producción:
 npm run build
 ```
 
-Para ejecutar la aplicación en modo producción:
-
-```plaintext
-npm run serve
-```
-
 ## Documentación del Código
 
 La documentación del código se ha generado utilizando JSDoc. Puedes acceder a la documentación completa en el siguiente enlace:
