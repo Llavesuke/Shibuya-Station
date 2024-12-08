@@ -21,7 +21,6 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const [sortOrder, setSortOrder] = useState({ rating: 'desc', followedCount: 'desc' });
 
   const mangasPerPage = 15;
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Define the proxy URL
 
   /**
    * Fetches tag UUIDs based on tag names.
@@ -33,7 +32,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   const fetchTagUUIDs = async (tags) => {
     if (!tags || tags.length === 0) return [];
     try {
-      const response = await axios.get(`${proxyUrl}https://api.mangadex.org/tag`);
+      const response = await axios.get('/api/tag');
       const allTags = response.data.data;
       return tags.map(tag => {
         const foundTag = allTags.find(t => t.attributes.name.en === tag || t.attributes.name.ja === tag);
@@ -74,7 +73,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
 
     try {
-      const response = await axios.get(`${proxyUrl}https://api.mangadex.org/manga`, { params: filters });
+      const response = await axios.get('/api/manga', { params: filters });
       const mangas = response.data.data;
       setMangas(mangas);
       setTotalMangas(response.data.total);
