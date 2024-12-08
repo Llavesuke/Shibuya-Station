@@ -1,10 +1,29 @@
-// api/mangaProxy.js
-
 import axios from 'axios';
+import Cors from 'cors';
+
+// Configuración de CORS
+const cors = Cors({
+  methods: ['GET', 'OPTIONS'], // Métodos permitidos
+  origin: '*', // Orígenes permitidos (puedes personalizar esto)
+});
+
+// Helper para manejar CORS en APIs de Next.js
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
 
 const baseUrl = 'https://api.mangadex.org';
 
 export default async function handler(req, res) {
+  await runMiddleware(req, res, cors); // Aplica las reglas de CORS
+  
   const { method, query } = req;
 
   if (method === 'GET' && query.imageUrl) {
@@ -17,10 +36,7 @@ export default async function handler(req, res) {
       console.error('Error fetching image:', error);
       res.status(500).json({ error: 'Error fetching image' });
     }
-  }
-
-  // Para las búsquedas de mangas
-  else if (method === 'GET' && !query.imageUrl) {
+  } else if (method === 'GET' && !query.imageUrl) {
     try {
       const response = await axios.get(`${baseUrl}/manga`, { params: req.query });
       res.status(200).json(response.data);
@@ -28,5 +44,8 @@ export default async function handler(req, res) {
       console.error('Error fetching mangas:', error);
       res.status(500).json({ error: 'Error fetching mangas' });
     }
+  } else {
+    res.setHeader('Allow', ['GET', 'OPTIONS']);
+    res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
