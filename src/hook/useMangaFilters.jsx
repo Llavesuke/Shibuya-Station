@@ -74,7 +74,8 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
   
     try {
       // Usando CORS Anywhere como proxy
-      const resp = await axios.get(`${baseUrl}/manga`, { params: filters });
+// Fetch mangas
+      const resp = await axios.get(`/api/mangaProxy/manga`, { params: filters });
       setMangas(resp.data.data || []);
       setTotalMangas(resp.data.total || 0);
       setError(null); // Limpiamos cualquier error anterior
@@ -93,7 +94,8 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
    */
   const fetchTagUUIDs = async (tagNames) => {
     try {
-      const response = await axios.get(`${baseUrl}/tag`);
+// Fetch tags
+      const response = await axios.get(`/api/mangaProxy/tag`);
       const tagsData = response.data.data;
   
       return tagNames.map((tagName) => {
