@@ -30,27 +30,32 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     };
   };
 
-  const fetchMangas = async (page) => {
+  const buildFilters = () => {
     const { query, authorUUID, status, includedTags, excludedTags, demographic, contentRating, sortOrder } = getParamsFromUrl();
-    const offset = (page - 1) * mangasPerPage;
-  
-    const includedTagUUIDs = await fetchTagUUIDs(includedTags);
-    const excludedTagUUIDs = await fetchTagUUIDs(excludedTags);
-  
+
     const filters = {
       title: query || undefined,
       authors: authorUUID ? [authorUUID] : undefined,
-      'status[]': status ? [status] : undefined,
-      'includedTags[]': includedTagUUIDs.length > 0 ? includedTagUUIDs : undefined,
-      'excludedTags[]': excludedTagUUIDs.length > 0 ? excludedTagUUIDs : undefined,
-      'publicationDemographic[]': demographic ? [demographic] : undefined,
-      'contentRating[]': contentRating ? [contentRating] : undefined,
+      'status[]': status || undefined,
+      'includedTags[]': includedTags.length > 0 ? includedTags : undefined,
+      'excludedTags[]': excludedTags.length > 0 ? excludedTags : undefined,
+      'publicationDemographic[]': demographic || undefined,
+      'contentRating[]': contentRating || undefined,
       limit: mangasPerPage,
-      offset,
-      'order[rating]': sortOrder.rating,
-      'order[followedCount]': sortOrder.followedCount,
+      offset: (currentPage - 1) * mangasPerPage,
+      'order[rating]': sortOrder.rating || undefined,
+      'order[followedCount]': sortOrder.followedCount || undefined,
       includes: ['cover_art', 'author'],
     };
+
+    // Elimina las propiedades con valores undefined o nulos
+    Object.keys(filters).forEach((key) => filters[key] === undefined && delete filters[key]);
+
+    return filters;
+  };
+
+  const fetchMangas = async (page) => {
+    const filters = buildFilters();
 
     try {
       // Usar el endpoint de tu proxy CORS
@@ -68,7 +73,7 @@ const useMangaFilters = (location, currentPage, setMangas, setTotalMangas) => {
     try {
       const response = await axios.get('/api/mangaProxy', { params: { url: 'https://api.mangadex.org/tags' } });
       const tagsData = response.data.data;
-  
+
       return tagNames.map((tagName) => {
         const tag = tagsData.find((t) => t.attributes.name.en === tagName);
         return tag ? tag.id : null;
