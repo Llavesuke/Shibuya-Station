@@ -48,9 +48,9 @@
 
 const Notifications = () => {
   return (
-    <div className="notifications">
+    <section className="notifications">
       <p>No hay nuevas actualizaciones</p>
-    </div>
+    </section>
   );
 }
 

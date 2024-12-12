@@ -1,0 +1,108 @@
+.library__manga-card {
+  position: relative; /* Posiciona el elemento relativamente para permitir posicionamiento absoluto de los hijos */
+  width: 200px; /* Ancho de la tarjeta */
+  height: 300px; /* Altura de la tarjeta */
+  border-radius: 15px; /* Bordes redondeados */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+  background: #2d4151; /* Fondo de la tarjeta */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* Sombra de la tarjeta */
+  transition: transform 0.3s ease; /* Transición suave para el efecto de transformación */
+}
+
+/* Estilo para el hover */
+.library__manga-card:hover {
+  transform: scale(1.05); /* Agranda la tarjeta cuando se hace hover */
+}
+
+/* Contenedor de la imagen */
+.library__manga-card-figure {
+  position: relative; /* Posiciona el elemento relativamente */
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Altura completa */
+  margin: 0; /* Sin margen */
+}
+
+/* Imagen */
+.library__manga-card-image {
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Altura completa */
+  object-fit: cover; /* La imagen cubre todo el contenedor sin distorsión */
+  display: block; /* Se muestra como un bloque */
+}
+
+.library__manga-card-star {
+  position: absolute; /* Posiciona el elemento absolutamente */
+  top: 10px; /* Espaciado desde la parte superior */
+  right: 10px; /* Espaciado desde la derecha */
+  font-size: 1.5rem; /* Tamaño de fuente grande */
+  color: #E6E6BF; /* Color de la estrella */
+  cursor: pointer; /* Cambia el cursor al pasar sobre la estrella */
+  transition: transform 0.3s ease; /* Transición suave para el efecto de transformación */
+}
+
+/* Agranda la estrella cuando se hace hover sobre la tarjeta */
+.library__manga-card:hover .library__manga-card-star {
+  transform: scale(1.2);
+}
+
+.favorite-star {
+  transition: color 0.3s ease; /* Transición suave para el cambio de color */
+}
+
+/* Si quieres que la estrella rellena (amarilla) cambie de color al estar activada */
+.favorite-star {
+  color: #E6E6BF; /* Color de la estrella */
+}
+
+/* Capa de color transparente sobre la imagen */
+.library__manga-card-overlay {
+  position: absolute; /* Posiciona el elemento absolutamente */
+  top: 0; /* Alinea a la parte superior */
+  left: 0; /* Alinea a la izquierda */
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Altura completa */
+  background-color: rgba(45, 65, 81, 0.53); /* Color #2D4151 con 53% de opacidad */
+}
+
+/* Gradiente */
+.library__manga-card-gradient {
+  position: absolute; /* Posiciona el elemento absolutamente */
+  bottom: 0; /* Alinea a la parte inferior */
+  left: 0; /* Alinea a la izquierda */
+  width: 100%; /* Ancho completo */
+  height: 50%; /* Altura del 50% */
+  border-radius: 0.5rem; /* Bordes redondeados */
+}
+
+/* Contenido del texto */
+.library__manga-card-content {
+  position: absolute; /* Posiciona el elemento absolutamente */
+  bottom: 0; /* Alinea a la parte inferior */
+  left: 0; /* Alinea a la izquierda */
+  width: 100%; /* Ancho completo */
+  text-align: center; /* Alineación del texto al centro */
+  padding: 10px; /* Espaciado interno */
+  box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
+  background: linear-gradient(180deg, rgba(4, 90, 191, 0) 0%, rgba(4, 91, 191, 0.356) 20%, rgba(0, 0, 0, 0.64) 100%); /* Fondo degradado */
+  display: flex; /* Utiliza flexbox para el contenido */
+  flex-direction: column; /* Disposición en columna */
+  justify-content: flex-end; /* Alinea el contenido al final */
+  min-height: 9rem; /* Altura mínima */
+}
+
+/* Título del manga */
+.library__manga-card-title {
+  font-size: 1.1rem; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Sombra del texto */
+  color: #E6E6BF; /* Color del texto */
+  margin: 0; /* Sin margen */
+}
+
+/* Autor del manga */
+.library__manga-card-author {
+  font-size: 0.9rem; /* Tamaño de fuente */
+  color: #E6E6BF; /* Color del texto */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Sombra del texto */
+  margin: 5px 0 0; /* Margen superior */
+}

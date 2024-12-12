@@ -110,10 +110,12 @@ const Library = () => {
   };
 
   return (
-    <div className="library">
-      <h1 className="library__title">Library</h1>
+    <section className="library">
+      <header className="library__header">
+        <h1 className="library__title">Library</h1>
+      </header>
 
-      <SearchBar query={query} setQuery={setQuery} handleSearch={updateUrlParams} />
+      <SearchBar query={query} setQuery={setQuery} />
 
       <AuthorSearch
         author={author}
@@ -124,14 +126,24 @@ const Library = () => {
 
       {/* Tag Filters */}
       <Filters
-        includedTags={includedTags} 
-        excludedTags={excludedTags} 
-        allTags={allTags} 
-        addTag={addTag} 
+        allTags={allTags}
+        includedTags={includedTags}
+        excludedTags={excludedTags}
+        addTag={addTag}
         removeTag={removeTag}
+        status={status}
+        setStatus={setStatus}
+        demographic={demographic}
+        setDemographic={setDemographic}
+        contentRating={contentRating}
+        setContentRating={setContentRating}
       />
 
-      <div className="library__grid">
+      <button onClick={updateUrlParams} className="library__search-button">
+        <p className="library__search-button-text">Search</p>
+      </button>
+
+      <section className="library__grid">
         {mangas.map((manga) => {
           const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
           const author = manga.relationships?.find((rel) => rel.type === 'author');
@@ -152,13 +164,13 @@ const Library = () => {
             />
           );
         })}
-      </div>
+      </section>
 
       <Pagination
         currentPage={currentPage} totalMangas={totalMangas} mangasPerPage={15}
         nextPage={nextPage} prevPage={prevPage}
       />
-    </div>
+    </section>
   );
 };
 

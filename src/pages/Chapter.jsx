@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import useChapter from '../hook/useChapter';
 
 /**
@@ -8,7 +8,11 @@ import useChapter from '../hook/useChapter';
  * @returns {JSX.Element} The Chapter component.
  */
 const Chapter = () => {
+  const [viewMode, setViewMode] = useState('single'); // 'single' or 'all'
   const { chapterId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { chapters } = location.state || { chapters: [] };
   const {
     pages,
     loading,
@@ -18,66 +22,129 @@ const Chapter = () => {
     chapterTitle,
     mangaTitle,
   } = useChapter(chapterId);
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(-1);
 
-  /**
-   * Navigates to the next page.
-   * @function
-   */
+  useEffect(() => {
+    const index = chapters.findIndex(chapter => chapter.id === chapterId);
+    setCurrentChapterIndex(index);
+    setCurrentPage(0); // Reset the current page to the first page
+    window.scrollTo(0, 0); // Reset the scroll to the top
+  }, [chapterId, chapters, setCurrentPage]);
+
+  const toggleViewMode = () => {
+    setViewMode(viewMode === 'single' ? 'all' : 'single');
+  };
+
   const goToNextPage = () => {
     if (currentPage < pages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
 
-  /**
-   * Navigates to the previous page.
-   * @function
-   */
   const goToPreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
 
+  const goToPreviousChapter = () => {
+    if (currentChapterIndex > 0) {
+      const previousChapterId = chapters[currentChapterIndex - 1].id;
+      navigate(`/chapter/${previousChapterId}`, { state: { chapters } });
+    }
+  };
+
+  const goToNextChapter = () => {
+    if (currentChapterIndex < chapters.length - 1) {
+      const nextChapterId = chapters[currentChapterIndex + 1].id;
+      navigate(`/chapter/${nextChapterId}`, { state: { chapters } });
+    }
+  };
+
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <p className="chapter__loading">Loading...</p>;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <p className="chapter__error">{error}</p>;
   }
 
   if (pages.length === 0) {
-    return <div className="no-pages">No pages available for this chapter.</div>;
+    return <p className="chapter__no-pages">No pages available for this chapter.</p>;
   }
 
   return (
-    <div className="chapter-container">
-      <h1 className="chapter-title">{chapterTitle || mangaTitle}</h1>
-      <div className="chapter-page-container">
-        <img
-          src={pages[currentPage]}
-          alt={`Page ${currentPage + 1}`}
-          className="chapter-page"
-        />
-      </div>
-      <div className="navigation-buttons">
-        <button
-          className="nav-button prev"
-          onClick={goToPreviousPage}
-          disabled={currentPage === 0}
-        >
-          ←
-        </button>
-        <button
-          className="nav-button next"
-          onClick={goToNextPage}
-          disabled={currentPage === pages.length - 1}
-        >
-          →
+    <section className="chapter">
+      <div className="chapter__header"> 
+        <h1 className="chapter__title">{chapterTitle || mangaTitle}</h1>
+        <button className="chapter__view-toggle" onClick={toggleViewMode}>
+          📄
         </button>
       </div>
-    </div>
+      {viewMode === 'single' ? (
+        <article className="chapter__page-container">
+          <img src={pages[currentPage]} alt={`Page ${currentPage + 1}`} className="chapter__page" />
+        </article>
+      ) : (
+        <article className="chapter__all-pages-container">
+          {pages.map((page, index) => (
+            <img key={index} src={page} alt={`Page ${index + 1}`} className="chapter__page" />
+          ))}
+        </article>
+      )}
+      {viewMode === 'single' && (
+        <nav className="chapter__navigation">
+          <div className="chapter__page-navigation">
+            <button
+              className="chapter__page-nav-prev"
+              onClick={goToPreviousPage}
+              disabled={currentPage === 0}
+            >
+              ←
+            </button>
+            <button
+              className="chapter__chapter-nav-prev"
+              onClick={goToPreviousChapter}
+              disabled={currentChapterIndex <= 0}
+            >
+              Previous Chapter
+            </button>
+            <button
+              className="chapter__chapter-nav-next"
+              onClick={goToNextChapter}
+              disabled={currentChapterIndex >= chapters.length - 1}
+            >
+              Next Chapter
+            </button>
+            <button
+              className="chapter__page-nav-next"
+              onClick={goToNextPage}
+              disabled={currentPage === pages.length - 1}
+            >
+              →
+            </button>
+          </div>
+        </nav>
+      )}
+      {viewMode === 'all' && (
+        <nav className="chapter__chapter-navigation">
+          <button
+            className="chapter__chapter-nav-prev"
+            onClick={goToPreviousChapter}
+            disabled={currentChapterIndex <= 0}
+          >
+            Previous Chapter
+          </button>
+          <button
+            className="chapter__chapter-nav-next"
+            onClick={goToNextChapter}
+            disabled={currentChapterIndex >= chapters.length - 1}
+          >
+            Next Chapter
+          </button>
+        </nav>
+      )}
+    </section>
   );
 };
 

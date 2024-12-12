@@ -1,0 +1,145 @@
+@import '../base/variables';
+
+/* Estilos generales para el contenedor de filtros */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px; /* Espaciado inferior */
+}
+
+/* Estilos para cada sección de filtros */
+.filters__section {
+  width: 22%; /* Ancho de cada sección */
+  margin-bottom: 15px; /* Espaciado inferior */
+}
+
+/* Estilos para los títulos de las secciones de filtros */
+.filters__title {
+  display: block;
+  margin-bottom: 5px; /* Espaciado inferior */
+  font-size: 0.9rem; /* Tamaño de fuente */
+}
+
+/* Estilos para los títulos colapsados de las secciones de filtros */
+.filters__title--collapsed {
+  cursor: pointer; /* Cambia el cursor al pasar sobre el título */
+}
+
+/* Estilos para la lista de etiquetas de filtros */
+.filters__tag-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaciado entre elementos */
+  background: #0e2b4b; /* Fondo azul oscuro */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 10px; /* Bordes redondeados */
+  color: #e2e2b6; /* Color del texto */
+  cursor: pointer; /* Cambia el cursor al pasar sobre la lista */
+  transition: background 0.3s, color 0.3s; /* Transición suave para cambios de fondo y color */
+  width: 32.5%; /* Ancho de la lista */
+}
+
+/* Estilos para las etiquetas de la lista de filtros */
+.filters__tag-list label {
+  margin-bottom: 5px; /* Espaciado inferior */
+}
+
+/* Estilos para las etiquetas deshabilitadas de la lista de filtros */
+.filters__tag-label--disabled {
+  color: #ccc; /* Color gris para etiquetas deshabilitadas */
+}
+
+/* Estilos para los checkboxes de la lista de filtros */
+.filters__checkbox {
+  margin-right: 5px; /* Espaciado derecho */
+}
+
+/* Estilos para los checkboxes de la lista de filtros */
+.filters__tag-list input[type="checkbox"] {
+  accent-color: #e2e2b6; /* Color de acento para los checkboxes */
+}
+
+/* Estilos para las etiquetas de la lista de filtros al pasar el cursor por encima */
+.filters__tag-list label:hover {
+  background: #082136; /* Fondo azul más oscuro */
+  color: #ffffff; /* Color del texto blanco */
+}
+
+/* Estilos para el select dentro de la sección de filtros */
+.filters__select {
+  width: 100%; /* Ancho completo */
+  padding: 8px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde gris */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estilos para el select dentro de la sección de filtros */
+.filters__section select {
+  padding: 10px; /* Espaciado interno para el contenido del select */
+  border: 2px solid #e2e2b6; /* Borde del select con color beige */
+  border-radius: 10px; /* Bordes redondeados */
+  background: #0e2b4b; /* Fondo del select con color azul oscuro */
+  color: #e2e2b6; /* Color del texto del select */
+  font-size: 1rem; /* Tamaño de fuente del texto */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el select */
+  transition: background 0.3s, border-color 0.3s; /* Transición suave para cambios de fondo y color del borde */
+}
+
+/* Estilos para el select al pasar el cursor por encima */
+.filters__section select:hover {
+  background: #082136; /* Cambia el fondo a un azul más oscuro */
+  border-color: #ffffff; /* Cambia el color del borde a blanco */
+}
+
+/* Estilos para la paginación de la biblioteca */
+.library__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px; /* Espaciado superior */
+}
+
+/* Estilos para los botones de paginación de la biblioteca */
+.library__pagination-button {
+  padding: 10px 15px; /* Espaciado interno */
+  background-color: #007bff; /* Fondo azul */
+  border: none; /* Sin borde */
+  color: white; /* Color del texto blanco */
+  font-size: 1rem; /* Tamaño de fuente */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  margin: 0 10px; /* Espaciado horizontal */
+}
+
+/* Estilos para los botones de paginación al pasar el cursor por encima */
+.library__pagination-button:hover {
+  background-color: #0056b3; /* Fondo azul más oscuro */
+}
+
+/* Estilos para los botones de paginación deshabilitados */
+.library__pagination-button:disabled {
+  background-color: #ccc; /* Fondo gris */
+  cursor: not-allowed; /* Cursor no permitido */
+}
+
+/* Estilos para la información de paginación de la biblioteca */
+.library__pagination-info {
+  font-size: 1rem; /* Tamaño de fuente */
+}
+
+/* Estilos responsivos para pantallas de hasta 768px */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column; /* Cambia la dirección del flex a columna */
+    align-items: stretch; /* Estira los elementos */
+  }
+
+  .filters__section {
+    width: 100%; /* Ancho completo */
+  }
+
+  .library-search-bar {
+    width: 100%; /* Ancho completo */
+  }
+}

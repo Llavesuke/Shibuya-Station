@@ -1,0 +1,85 @@
+.hamburger-menu {
+  display: none;
+  z-index: 1000; /* Asegúrate de que el menú hamburguesa esté por encima de todos los contenidos */
+}
+
+.hamburger-menu__toggle {
+  font-size: 2rem; /* Tamaño de fuente grande para el icono de toggle */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el toggle */
+  color: #fff; /* Color blanco para el icono de toggle */
+}
+
+.hamburger-menu__list {
+  display: none;
+  flex-direction: column; /* Disposición en columna para los elementos de la lista */
+  list-style: none; /* Elimina los estilos de lista por defecto */
+  background: linear-gradient(180deg, #064998 0%, #01152E 100%); /* Fondo degradado */
+  position: absolute; /* Posiciona la lista de manera absoluta */
+  top: 4rem; /* Espaciado desde la parte superior */
+  left: 0; /* Alinea a la izquierda */
+  width: 100%; /* Ancho completo */
+  height: 10000%; /* Altura extendida */
+  max-height: 100%; /* Altura máxima */
+  padding: 1rem; /* Espaciado interno */
+  z-index: 1000; /* Asegúrate de que la lista del menú hamburguesa esté por encima de todos los contenidos */
+}
+
+.hamburger-menu__list--open {
+  display: flex; /* Muestra la lista cuando está abierta */
+}
+
+.hamburger-menu__link {
+  color: #E6E6BF; /* Color del texto del enlace */
+  text-decoration: none; /* Sin subrayado */
+  margin: 1rem 0; /* Espaciado vertical */
+  display: flex; /* Utiliza flexbox para los enlaces */
+  align-items: center; /* Alinea los elementos verticalmente al centro */
+}
+
+.hamburger-link__icon {
+  font-size: 2rem; /* Tamaño de fuente grande para el icono */
+  margin-right: 0.5rem; /* Espaciado derecho */
+}
+
+.hamburger-link__text {
+  font-size: 2rem; /* Tamaño de fuente grande para el texto */
+}
+
+.hamburger-menu__link-logo {
+  display: flex; /* Utiliza flexbox para el logo */
+  flex-direction: column; /* Disposición en columna */
+  align-items: center; /* Alinea los elementos al centro */
+  text-align: center; /* Alineación del texto al centro */
+  margin-bottom: 1rem; /* Espaciado inferior */
+}
+
+.hamburger-link__logo {
+  width: 100px; /* Ancho del logo */
+  height: auto; /* Altura automática */
+  margin-bottom: 0.5rem; /* Espaciado inferior */
+}
+
+.hamburger-link__title {
+  font-family: 'Anton', sans-serif; /* Fuente Anton */
+  letter-spacing: 0.6rem; /* Espaciado entre letras */
+  text-align: center; /* Alineación del texto al centro */
+  font-weight: 800; /* Peso de fuente negrita */
+  font-size: 2rem; /* Tamaño de fuente grande */
+  color: #fff; /* Color del texto blanco */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .navbar {
+    display: none; /* Oculta la barra de navegación en pantallas pequeñas */
+  }
+
+  .hamburger-menu {
+    display: flex; /* Utiliza flexbox para alinear los elementos */
+    justify-content: space-between; /* Distribuye los elementos con espacio entre ellos */
+    align-items: center; /* Alinea los elementos verticalmente al centro */
+    background: #064998; /* Fondo azul oscuro */
+    padding: 1rem; /* Espaciado interno */
+    width: 100%; /* Ancho completo */
+  }
+}

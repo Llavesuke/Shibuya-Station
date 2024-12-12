@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaSearch } from 'react-icons/fa';
 
 /**
  * AuthorSearch component that allows users to search for authors and select from suggestions.
@@ -49,20 +50,26 @@ const AuthorSearch = ({ author, setAuthor, setAuthorUUID, updateUrlParams }) => 
   }, [author]);
 
   return (
-    <div className="author-search-wrapper">
-      <input
-        type="text"
-        placeholder="Search by Author"
-        value={author}
-        onChange={(e) => {
-          setAuthor(e.target.value); // Update the author state
-        }}
-      />
+    <section className="author-search">
+      <form className="author-search__form">
+        <label htmlFor="author-search-input" className="author-search__label">
+          <FaSearch className="author-search__icon" />
+        </label>
+        <input
+          type="text"
+          id="author-search-input"
+          placeholder="Search by Author"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)} // Update the author state
+          className="author-search__input"
+        />
+      </form>
       {authorSuggestions.length > 0 && (
-        <ul className="author-suggestions">
+        <ul className="author-search__suggestions">
           {authorSuggestions.map((author) => (
             <li
               key={author.uuid}
+              className="author-search__suggestion-item"
               onClick={() => {
                 setAuthorUUID(author.uuid);
                 setAuthor(author.name);
@@ -70,12 +77,12 @@ const AuthorSearch = ({ author, setAuthor, setAuthorUUID, updateUrlParams }) => 
                 setAuthorSuggestions([]); // Clear suggestions after selecting an author
               }}
             >
-              {author.name}
+              <span className="author-search__suggestion-text">{author.name}</span>
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 };
 

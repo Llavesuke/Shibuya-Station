@@ -2,20 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * Footer component that displays links to various sections of the site.
+ * Footer component that provides links to various sections of the site.
  * @component
+ * @returns {JSX.Element} The Footer component.
  */
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-links">
-          <Link to="/contact">Contacto</Link> {/* Link to the contact page */}
-          <a href="#terminos">Términos y Condiciones</a> {/* Link to the terms and conditions section */}
-          <a href="#privacidad">Política de Privacidad</a> {/* Link to the privacy policy section */}
-          <a href="#faq">FAQ</a> {/* Link to the FAQ section */}
-        </div>
-      </div>
+      <section className="footer__content">
+        <nav className="footer__links">
+          <Link to="/contact" className="footer__link">Contacto</Link> {/* Link to the contact page */}
+          <a href="#terminos" className="footer__link">Términos y Condiciones</a> {/* Link to the terms and conditions section */}
+          <a href="#privacidad" className="footer__link">Política de Privacidad</a> {/* Link to the privacy policy section */}
+          <a href="#faq" className="footer__link">FAQ</a> {/* Link to the FAQ section */}
+        </nav>
+      </section>
     </footer>
   );
 }
