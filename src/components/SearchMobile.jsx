@@ -4,13 +4,13 @@ import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 /**
- * SearchBar component that allows users to search for manga.
+ * SearchMobile component that allows users to search for manga.
  * @component
  * @param {Object} props - The props object.
  * @param {Function} props.onSearchResults - Function to handle the search results.
- * @returns {JSX.Element} The SearchBar component.
+ * @returns {JSX.Element} The SearchMobile component.
  */
-const SearchBar = ({ onSearchResults }) => {
+const SearchMobile = ({ onSearchResults }) => {
   const [query, setQuery] = useState(''); // State to manage the search query
   const [loading, setLoading] = useState(false); // State to manage the loading state
   const [results, setResults] = useState([]); // State to manage the search results
@@ -39,7 +39,7 @@ const SearchBar = ({ onSearchResults }) => {
       const response = await axios.get('https://api.mangadex.org/manga', {
         params: {
           title: query,
-          limit: 20,
+          limit: 5,
         },
       });
 
@@ -105,20 +105,20 @@ const SearchBar = ({ onSearchResults }) => {
   };
 
   return (
-    <section className="search-bar-container">
-      <form className="search-bar">
-        <FaSearch className="search-bar__icon" />
+    <section className="search-mobile-container">
+      <form className="search-mobile">
+        <FaSearch className="search-mobile__icon" />
         <input
           type="text"
           placeholder="Search Manga..."
           value={query}
           onChange={handleChange}
-          className="search-bar__input"
+          className="search-mobile__input"
         />
       </form>
 
       {query && (
-        <section className="search-results">
+        <section className="search-mobile-results">
           {loading ? (
             <p>Searching...</p>
           ) : error ? (
@@ -127,14 +127,14 @@ const SearchBar = ({ onSearchResults }) => {
             results.map((manga) => (
               <article
                 key={manga.id}
-                className="search-result-item"
+                className="search-mobile-result-item"
                 onClick={() => handleResultClick(manga.id)} 
               >
                 {manga.cover_url && (
                   <img
                     src={manga.cover_url}
                     alt={manga.title}
-                    className="search-result-cover"
+                    className="search-mobile-result-cover"
                   />
                 )}
                 <span>{manga.title}</span>
@@ -149,4 +149,4 @@ const SearchBar = ({ onSearchResults }) => {
   );
 };
 
-export default SearchBar;
+export default SearchMobile;

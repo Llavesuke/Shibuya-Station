@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Pagination component for navigating through pages of manga.
+ * Pagination component for navigating through pages.
  * @component
  * @param {Object} props - The props object.
  * @param {number} props.currentPage - The current page number.
@@ -13,17 +13,17 @@ import PropTypes from 'prop-types';
  * @returns {JSX.Element} The Pagination component.
  */
 const Pagination = ({ currentPage, totalMangas, mangasPerPage, nextPage, prevPage }) => (
-  <div className="library__pagination">
-    <button onClick={prevPage} disabled={currentPage === 1}>
+  <nav className="pagination">
+    <button className="pagination__button pagination__button--prev" onClick={prevPage} disabled={currentPage === 1}>
       Previous
     </button>
-    <span>
+    <span className="pagination__info">
       Page {currentPage} of {Math.ceil(totalMangas / mangasPerPage)}
     </span>
-    <button onClick={nextPage} disabled={currentPage === Math.ceil(totalMangas / mangasPerPage)}>
+    <button className="pagination__button pagination__button--next" onClick={nextPage} disabled={currentPage === Math.ceil(totalMangas / mangasPerPage)}>
       Next
     </button>
-  </div>
+  </nav>
 );
 
 // PropTypes validation to ensure correct usage

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../context/userContext';
 
 /**
  * Manga component that displays detailed information about a manga and its chapters.
@@ -13,6 +14,7 @@ const Manga = () => {
   const [chapters, setChapters] = useState([]); // State to store chapters
   const baseUrl = 'https://api.mangadex.org';
   const navigate = useNavigate(); // Hook to navigate to other routes
+  const [user, setUser] = useContext(UserContext); // Get the user state from context
 
   /**
    * Handles the click event on a chapter to navigate to the chapter details page.
@@ -20,7 +22,7 @@ const Manga = () => {
    * @param {string} chapterId - The ID of the clicked chapter.
    */
   const handleChapterClick = (chapterId) => {
-    navigate(`/chapter/${chapterId}`); 
+    navigate(`/chapter/${chapterId}`, { state: { chapters } });
   };
 
   /**
@@ -122,9 +124,9 @@ const Manga = () => {
   const tags = mangaDetails?.attributes?.tags?.map((tag) => tag.attributes?.name?.en || tag.attributes?.name?.ja) || [];
 
   return (
-    <div className="manga-container">
+    <main className="manga-container">
       {/* Left Section */}
-      <div className="manga-left">
+      <section className="manga-left">
         <img className="manga-cover" src={coverUrl} alt={mangaDetails?.attributes?.title?.en || 'No Title'} />
         <h1 className="manga-title">{mangaDetails?.attributes?.title?.en || 'No Title'}</h1>
         <h2 className="manga-author">{authorName}</h2>
@@ -136,19 +138,20 @@ const Manga = () => {
             <span key={index} className="manga-tag">{tag}</span>
           ))}
         </div>
-        <div>
-          <label htmlFor="reading-status-select">Estado:</label>
-          <select id="reading-status-select" onChange={handleReadingStatusChange}>
-            <option value="">Selecciona un estado</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="leyendo">Leyendo</option>
-            <option value="terminado">Terminado</option>
-          </select>
-        </div>
-      </div>
+        {user && (
+          <div className="manga__estado">
+            <select className="reading-status-select" onChange={handleReadingStatusChange}>
+              <option value="">Selecciona un estado</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="leyendo">Leyendo</option>
+              <option value="terminado">Terminado</option>
+            </select>
+          </div>
+        )}
+      </section>
 
       {/* Right Section */}
-      <div className="manga-right">
+      <aside className="manga-right">
         <div className="right__container">
           <h2>Capítulos</h2>
           <ul className="chapter-list">
@@ -168,8 +171,8 @@ const Manga = () => {
           </ul>
           
         </div>
-      </div>
-    </div>
+      </aside>
+    </main>
   );
 };
 

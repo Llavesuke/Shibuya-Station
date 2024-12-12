@@ -83,29 +83,40 @@ const Login = () => {
   };
 
   return (
-    <>
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <label htmlFor="email" id="emailInput">Email:</label>
-        <input
-          type="text"
-          name="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-
-        <label htmlFor="password" id="passwordInput">Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
-
-        <button type="submit" id="formSubmitBtn">Login</button>
-      </form>
-
+    <main className="login">
+      <section className="login__container">
+        <header className="login__header">
+          <h2 className="login__title">Welcome Back!</h2>
+          <p className="login__subtitle">Please login to your account</p>
+        </header>
+        <section className="login__form-container">
+          <form className="login__form" onSubmit={handleSubmit}>
+            <div className="form__group">
+              <label htmlFor="email" className="form__label">Email:</label>
+              <input
+                type="text"
+                name="email"
+                className="form__input"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+            <div className="form__group">
+              <label htmlFor="password" className="form__label">Password:</label>
+              <input
+                type="password"
+                name="password"
+                className="form__input"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+            </div>
+            <button type="submit" className="form__button">Login</button>
+          </form>
+        </section>
+      </section>
       <ToastContainer />
-    </>
+    </main>
   );
 };
 

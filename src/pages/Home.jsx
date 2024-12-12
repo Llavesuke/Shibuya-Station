@@ -1,118 +1,113 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import MangaCard from '../components/MangaCard';
 
-/**
- * Home component that displays the homepage with popular mangas.
- * @component
- * @returns {JSX.Element} The Home component.
- */
 const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalMangas, setTotalMangas] = useState(0);
   const [error, setError] = useState(null);
-  const mangasPerPage = 5;
+  const mangasPerPage = 15; // Incrementamos para manejar un efecto fluido.
   const baseUrl = 'https://api.mangadex.org';
   const location = useLocation();
   const navigate = useNavigate();
 
-  /**
-   * Fetches popular mangas from the API.
-   * @async
-   * @function
-   * @param {number} page - The page number to fetch.
-   */
-  const fetchPopularMangas = async (page) => {
-    const offset = (page - 1) * mangasPerPage;
+  const fetchPopularMangas = async () => {
     try {
       const response = await axios.get(`${baseUrl}/manga`, {
         params: {
           limit: mangasPerPage,
-          offset,
           order: { rating: 'desc' },
           includes: ['cover_art', 'author'],
         },
       });
 
       setPopularMangas(response.data.data);
-      setTotalMangas(response.data.total);
     } catch (err) {
       console.error('Error fetching popular mangas:', err);
       setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
     }
   };
 
-  /**
-   * Extracts the page number from the URL.
-   * @function
-   * @returns {number} The page number.
-   */
-  const getPageFromUrl = () => {
-    const urlParams = new URLSearchParams(location.search);
-    const page = parseInt(urlParams.get('page'), 10);
-    return isNaN(page) ? 1 : page;
-  };
-
   useEffect(() => {
-    const pageFromUrl = getPageFromUrl();
-    setCurrentPage(pageFromUrl);
-    fetchPopularMangas(pageFromUrl);
+    fetchPopularMangas();
   }, [location]);
 
-  /**
-   * Handles the click event on a manga card.
-   * @function
-   * @param {string} mangaId - The ID of the clicked manga.
-   */
   const handleCardClick = (mangaId) => {
     navigate(`/manga/${mangaId}`);
   };
 
+  // Determinar el número de slides visibles dinámicamente
+  const slidesPerView = popularMangas.length < 5 ? popularMangas.length : 5;
+
   return (
-    <div className="home-container">
-      <div className="home">
+    <main className="home-container">
+      <section className="home">
         <img className="home__banner" src="banner-home.png" alt="imagen manga de Shibuya" />
         <h1 className="home__title">WELCOME TO SHIBUYA</h1>
-        
-        <div className="home__bottom">
-          <div className="home__info-box">¡Saliendo de la estación!</div>
+
+        <section className="home__bottom">
+          <p className="home__info-box">¡Saliendo de la estación!</p>
           <button className="home__button">Popular</button>
-        </div>
+        </section>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <p className="error-message">{error}</p>}
 
-        <div className="home__popular-mangas">
-          <div className="library__grid">
-            {popularMangas.map((manga) => {
+        <section className="home__popular-mangas">
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={slidesPerView}
+            centeredSlides={true}
+            loop={slidesPerView < popularMangas.length}
+            slideToClickedSlide={true}
+            preventClicks={false} // Ensure this is set to false
+            preventClicksPropagation={false} // Ensure this is set to false
+            breakpoints={{
+              640: { slidesPerView: 3, spaceBetween: 10 },
+              1024: { slidesPerView: 5, spaceBetween: 30 },
+            }}
+          >
+            {[...popularMangas, ...popularMangas].map((manga, index) => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
-              
               const coverUrl = cover
                 ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';
-
               const authorName = author ? author.attributes?.name : 'Unknown Author';
-              
-              // Check for the title in English (or fallback to Japanese, then a default value)
               const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
 
               return (
-                <MangaCard
-                  key={manga.id}
-                  id={manga.id}
-                  title={title}
-                  author={authorName}
-                  coverUrl={coverUrl}
-                  onClick={handleCardClick}
-                />
+                <SwiperSlide key={`${manga.id}-${index}`}>
+                  <article className={`home__gallery-item swiper-slide`}>
+                    <MangaCard
+                      id={manga.id}
+                      title={title}
+                      author={authorName}
+                      coverUrl={coverUrl}
+                      onClick={() => handleCardClick(manga.id)}
+                    />
+                  </article>
+                </SwiperSlide>
               );
             })}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Swiper>
+        </section>
+
+        <section className="home__box-content">
+          <img
+            className="box-content__image"
+            src="isagi-block.png"
+            alt="Yoichi Isagi falling manga draw"
+          />
+          <p className="box-content__text">
+            Una <span>experiencia como </span> nunca antes
+          </p>
+        </section>
+      </section>
+    </main>
   );
 };
 

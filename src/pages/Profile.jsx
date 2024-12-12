@@ -14,7 +14,7 @@ const Profile = () => {
   const [readingMangas, setReadingMangas] = useState([]);
   const [completedMangas, setCompletedMangas] = useState([]);
   const [view, setView] = useState('all'); // State to manage the current view
-  const [profileImage, setProfileImage] = useState('path-to-your-image.png'); // State to manage the profile image
+  const [profileImage, setProfileImage] = useState(localStorage.getItem('profileImage') || 'path-to-your-image.png'); // State to manage the profile image
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Profile = () => {
    * @returns {JSX.Element} The rendered manga cards.
    */
   const renderMangas = (mangas) => (
-    <div className="profile__favorite-mangas">
+    <section className="profile__favorite-mangas">
       {mangas.map((manga) => (
         <MangaCard
           key={manga.id}
@@ -64,7 +64,7 @@ const Profile = () => {
           onUpdateFavorites={updateFavorites}
         />
       ))}
-    </div>
+    </section>
   );
 
   /**
@@ -80,7 +80,9 @@ const Profile = () => {
         if (img.width >= 500 && img.height >= 500) {
           const reader = new FileReader();
           reader.onload = (e) => {
-            setProfileImage(e.target.result);
+            const imageUrl = e.target.result;
+            setProfileImage(imageUrl);
+            localStorage.setItem('profileImage', imageUrl); // Save the image to localStorage
           };
           reader.readAsDataURL(file);
         } else {
@@ -97,15 +99,25 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile">
-      <div className="profile__card">
-        <div className="profile__left">
-          <div className="profile__image-container">
+    <main className="profile">
+      <article className="profile__card">
+      <section 
+          /* He definido el estilo directamente aqui ya que es un estilo que no voy a utilizar en ningun otro sitio
+          por tanto, puedo declalarlo directamente aquí aunque esto es una mala praxis*/
+          style={{ 
+            flex: 1, 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center' 
+          }} 
+          className="profile__left"
+        >
+          <figure className="profile__image-container">
             <img
               src={profileImage}
               alt="Profile Avatar"
               className="profile__image"
-              style={{ width: '500px', height: '500px', cursor: 'pointer', objectFit: 'cover', objectPosition: 'center' }}
+              style={{ cursor: 'pointer', objectFit: 'cover', objectPosition: 'center' }}
               onClick={() => document.getElementById('profileImageInput').click()}
             />
             <input
@@ -115,62 +127,69 @@ const Profile = () => {
               style={{ display: 'none' }}
               onChange={handleImageChange}
             />
-          </div>
-        </div>
-        <div className="profile__right">
-          <h1 className="profile__username">ElVaquilla</h1>
-          <p className="profile__date">Fecha de embarque: 20-02-2024</p>
-          <div className="profile__details-row">
+          </figure>
+        </section>
+        <section className="profile__right">
+          <header className="profile__header">
+            <img alt="Background Tren" className="profile__bg-tren" src="/bg-tren.png" />
+            <h1 className="profile__username">ElVaquilla</h1>
+            <p className="profile__date">Fecha de embarque: 20-02-2024</p>
+          </header>
+          <hr className="profile__divider" />
+          <section className="profile__details-row">
             <div className="profile__detail-item">
-              <span className="profile__label">Asiento</span>
-              <span className="profile__value">10</span>
+              <p className="profile__label">Asiento</p>
+              <p className="profile__value">10</p>
             </div>
             <div className="profile__detail-item">
-              <span className="profile__label">Manga favorito</span>
-              <span className="profile__value">Oshi No Ko</span>
+              <p className="profile__label">Manga favorito</p>
+              <p className="profile__value">Oshi No Ko</p>
             </div>
             <div className="profile__detail-item">
-              <span className="profile__label">Plataforma</span>
-              <span className="profile__value">4</span>
+              <p className="profile__label">Plataforma</p>
+              <p className="profile__value">4</p>
             </div>
-          </div>
+          </section>
+          <hr className="profile__divider" />
           <p className="profile__manga-count">Mangas leídos: 777</p>
-        </div>
-        <div className="profile__barcode">
-          <span className="profile__barcode-text">Shibuya Station Code</span>
-        </div>
-      </div>
-      <div className="profile__actions">
+          <div className="profile__barcode">
+            <span className="profile__barcode-text">Shibuya Station Code</span>
+          </div>
+        </section>
+      </article>
+      <nav className="profile__actions">
         <button className="profile__button" onClick={() => handleViewChange('pending')}>Pendiente</button>
         <button className="profile__button" onClick={() => handleViewChange('reading')}>Leyendo</button>
         <button className="profile__button" onClick={() => handleViewChange('completed')}>Terminados</button>
         <button className="profile__button" onClick={() => handleViewChange('favorites')}>Favoritos</button>
-      </div>
+      </nav>
+      
       {view === 'favorites' && (
-        <div className="profile__favorite-mangas-container">
+        <section className="profile__favorite-mangas-container">
           <h2>Mangas Favoritos</h2>
           {renderMangas(favoriteMangas)}
-        </div>
+        </section>
       )}
+
       {view === 'pending' && (
-        <div className="profile__favorite-mangas-container">
+        <section className="profile__favorite-mangas-container">
           <h2>Mangas Pendientes</h2>
           {renderMangas(pendingMangas)}
-        </div>
+        </section>
       )}
       {view === 'reading' && (
-        <div className="profile__favorite-mangas-container">
+        <section className="profile__favorite-mangas-container">
           <h2>Mangas Leyendo</h2>
           {renderMangas(readingMangas)}
-        </div>
+        </section>
       )}
       {view === 'completed' && (
-        <div className="profile__favorite-mangas-container">
+        <section className="profile__favorite-mangas-container">
           <h2>Mangas Terminados</h2>
           {renderMangas(completedMangas)}
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 };
 

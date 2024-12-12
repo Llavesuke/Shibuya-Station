@@ -59,7 +59,6 @@ const Register = () => {
     confirmPassword: '',
   });
 
-  const navigate = useNavigate(); // Hook to navigate to other routes
 
   /**
    * Handles the form submission.
@@ -130,45 +129,60 @@ const Register = () => {
   };
 
   return (
-    <>
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <label htmlFor="username" id="nameInput">Username:</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-        />
-
-        <label htmlFor="email" id="emailInput">Email:</label>
-        <input
-          type="text"
-          name="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-
-        <label htmlFor="password" id="passwordInput">Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
-
-        <label htmlFor="confirmPassword" id="confirmPasswordInput">Confirm Password:</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-        />
-
-        <button type="submit" id="formSubmitBtn">Register</button>
-      </form>
-
+    <main className="register">
+      <section className="register__container">
+        <header className="register__header">
+          <h2 className="register__title">Create Account</h2>
+          <p className="register__subtitle">Please fill in the details to create an account</p>
+        </header>
+        <section className="register__form-container">
+          <form className="register__form" onSubmit={handleSubmit}>
+            <fieldset className="register__group">
+              <label htmlFor="username" className="register__label" id="usernameInput">Username:</label>
+              <input
+                type="text"
+                name="username"
+                className="register__input"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              />
+            </fieldset>
+            <fieldset className="register__group">
+              <label htmlFor="email" className="register__label" id="emailInput">Email:</label>
+              <input
+                type="email"
+                name="email"
+                className="register__input"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </fieldset>
+            <fieldset className="register__group">
+              <label htmlFor="password" className="register__label" id="passwordInput">Password:</label>
+              <input
+                type="password"
+                name="password"
+                className="register__input"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+            </fieldset>
+            <fieldset className="register__group">
+              <label htmlFor="confirmPassword" className="register__label" id="confirmPasswordInput">Confirm Password:</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                className="register__input"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              />
+            </fieldset>
+            <button type="submit" className="register__button" id="formSubmitBtn">Register</button>
+          </form>
+        </section>
+      </section>
       <ToastContainer />
-    </>
+    </main>
   );
 };
 

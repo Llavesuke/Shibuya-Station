@@ -57,13 +57,13 @@ const MangaCard = ({ id, title, author, coverUrl, onClick }) => {
           src={coverUrl}
           alt={title || 'No Title'}
         />
-        <div className="library__manga-card-overlay"></div>
+        <span className="library__manga-card-overlay"></span>
         <figcaption className="library__manga-card-gradient"></figcaption>
 
         {/* Star icon that toggles favorite status on click */}
-        <div className="library__manga-card-star" onClick={handleStarClick}>
+        <span className="library__manga-card-star" onClick={handleStarClick}>
           {isFavorite ? <FaStar className="favorite-star" /> : <FaRegStar className="favorite-star" />}
-        </div>
+        </span>
       </figure>
       <section className="library__manga-card-content">
         <h3 className="library__manga-card-title">{title || 'No Title'}</h3>

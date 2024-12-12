@@ -1,5 +1,4 @@
-// Filters.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Filters Component
@@ -23,53 +22,69 @@ import React from 'react';
  * 
  * @returns {JSX.Element} The Filters component.
  */
-const Filters = ({
-  includedTags, excludedTags, allTags, addTag, removeTag,
-  status, setStatus, demographic, setDemographic, contentRating, setContentRating
-}) => {
-  return (
-    <div className="filters">
-      {/* Tags Section */}
-      <div className="filters__section">
-        <h3>Tags</h3>
-        <div className="filters__tags">
 
-          {/* Included Tags */}
-          <div className="filters__tag-list">
-            <h4>Included Tags</h4>
+const Filters = ({ allTags, includedTags, excludedTags, addTag, removeTag, status, setStatus, demographic, setDemographic, contentRating, setContentRating }) => {
+  const [showIncludedTags, setShowIncludedTags] = useState(false);
+  const [showExcludedTags, setShowExcludedTags] = useState(false);
+
+  const toggleIncludedTags = () => {
+    setShowIncludedTags(!showIncludedTags);
+  };
+
+  const toggleExcludedTags = () => {
+    setShowExcludedTags(!showExcludedTags);
+  };
+
+  return (
+    <section className="filters">
+      {/* Included Tags */}
+      <section className="filters__section">
+        <h4 className={`tag-list__title ${showIncludedTags ? '' : 'collapsed'}`} onClick={toggleIncludedTags}>
+          Included Tags
+        </h4>
+        {showIncludedTags && (
+          <section className="filters__tag-list">
             {allTags.map(tag => (
-              <label key={tag}>
+              <label key={tag} className={excludedTags.includes(tag) ? 'disabled' : ''}>
                 <input
                   type="checkbox"
                   value={tag}
                   checked={includedTags.includes(tag)}
                   onChange={() => includedTags.includes(tag) ? removeTag(tag, true) : addTag(tag, true)}
+                  disabled={excludedTags.includes(tag)}
                 />
                 {tag}
               </label>
             ))}
-          </div>
+          </section>
+        )}
+      </section>
 
-          {/* Excluded Tags */}
-          <div className="filters__tag-list">
-            <h4>Excluded Tags</h4>
+      {/* Excluded Tags */}
+      <section className="filters__section">
+        <h4 className={`tag-list__title ${showExcludedTags ? '' : 'collapsed'}`} onClick={toggleExcludedTags}>
+          Excluded Tags
+        </h4>
+        {showExcludedTags && (
+          <section className="filters__tag-list">
             {allTags.map(tag => (
-              <label key={tag}>
+              <label key={tag} className={includedTags.includes(tag) ? 'disabled' : ''}>
                 <input
                   type="checkbox"
                   value={tag}
                   checked={excludedTags.includes(tag)}
                   onChange={() => excludedTags.includes(tag) ? removeTag(tag, false) : addTag(tag, false)}
+                  disabled={includedTags.includes(tag)}
                 />
                 {tag}
               </label>
             ))}
-          </div>
-        </div>
-      </div>
+          </section>
+        )}
+      </section>
 
       {/* Status Filter */}
-      <div className="filters__section">
+      <section className="filters__section">
         <h3>Status</h3>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">All</option>
@@ -77,10 +92,10 @@ const Filters = ({
           <option value="completed">Completed</option>
           <option value="hiatus">Hiatus</option>
         </select>
-      </div>
-
+      </section>
+      
       {/* Demographic Filter */}
-      <div className="filters__section">
+      <section className="filters__section">
         <h3>Demographic</h3>
         <select value={demographic} onChange={(e) => setDemographic(e.target.value)}>
           <option value="">All</option>
@@ -89,20 +104,21 @@ const Filters = ({
           <option value="seinen">Seinen</option>
           <option value="josei">Josei</option>
         </select>
-      </div>
+      </section>
 
       {/* Content Rating Filter */}
-      <div className="filters__section">
+      <section className="filters__section">
         <h3>Content Rating</h3>
         <select value={contentRating} onChange={(e) => setContentRating(e.target.value)}>
           <option value="">All</option>
-          <option value="safe">Safe</option>
-          <option value="suggestive">Suggestive</option>
-          <option value="erotica">Erotica</option>
-          <option value="pornographic">Pornographic</option>
+          <option value="G">G</option>
+          <option value="PG">PG</option>
+          <option value="PG-13">PG-13</option>
+          <option value="R">R</option>
+          <option value="R+">R+</option>
         </select>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };
 

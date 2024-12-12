@@ -1,0 +1,111 @@
+/* Variables de colores para el modo actual */
+$gray-light: #ccc;
+$gray-dark: #333;
+$blue-primary: #1b42c3;
+$blue-hover: #0a2d66;
+$white: #fff;
+$dark-gray: #2d3748;
+$yellow-light: #E6E6BF;
+$blue-deep: #064998;
+$blue-dark: #01152E;
+$blue-soft: #82B6DF;
+$blue-mid: #1a3a6b;
+$yellow-muted: #c7c7a3;
+$blue-muted: #4B7DA3;
+$blue-darken: #022A59;
+$black-darkest: #030F1C;
+$gray-lighter: #eee;
+$blue-steel: #7896b8;
+$blue-deep2: #0e2b4b;
+$yellow-muted2: #e2e2b6;
+$navy-deep: #082136;
+$gray-medium: #555;
+$gray-muted: #999;
+$blue-dark-muted: #2d4151;
+$beige-dark: #D4A373;
+$gray-lightest: #f5f5f5;
+$gray-muted2: #d1d1d1;
+$gray-soft: #b2b2b2;
+$blue-muted3: #4a5568;
+$blue-darker: #1a202c;
+$blue-bright: #63b3ed;
+$gray-muted3: #a0aec0;
+$blue-muted4: #0062cc;
+$blue-deepest: #0056b3;
+$blue-darkest: #004494;
+$beige-muted: #cdcdaa;
+$yellow-bright: #fcea84;
+$gray-darkest: #444;
+$red-bright: #ff5733;
+$red-tomato: #ff6347;
+$gray-muted4: #aaa;
+$blue-bright2: #007bff;
+$blue-deepest2: #003366;
+$beige-muted2: #baba90;
+$navy-muted: #0b1c38;
+$blue-bright3: #00509e;
+$navy-dark: #0c1f3b;
+$blue-muted5: #003e80;
+$blue-dark-muted2: #002347;
+$gray-muted5: #ddd;
+$red-bright2: #ff4d4d;
+
+$blue-bright-rgba: rgba(97, 153, 226, 1);
+$black-light: rgba(0, 0, 0, 0.7);
+$black-light2: rgba(0, 0, 0, 0.1);
+$black-medium: rgba(0, 0, 0, 0.5);
+$white-translucent: rgba(255, 255, 255, 0.1);
+$black-light3: rgba(0, 0, 0, 0.2);
+$black-medium2: rgba(45, 65, 81, 0.53);
+$blue-light-translucent: rgba(4, 91, 191, 0.356);
+$black-translucent: rgba(0, 0, 0, 0.64);
+$black-opacity: rgba(0, 0, 0, 0.3);
+$black-opacity2: rgba(0, 0, 0, 0.4);
+$black-opacity3: rgba(0, 0, 0, 0.16);
+$black-opacity4: rgba(0, 0, 0, 0.14);
+$black-opacity5: rgba(0, 0, 0, 0.08);
+$black-opacity6: rgba(0, 0, 0, 0.02);
+$blue-light-semi: rgba(6, 73, 152, 0.5);
+$black-opacity7: rgba(30, 30, 30, 0.9);
+$yellow-translucent: rgba(206, 189, 101, 0.8);
+$yellow-opacity: rgba(255, 244, 145, 0.4);
+$red-opacity: rgba(255, 87, 51, 1);
+$blue-bright-semi: rgba(0, 123, 255, 0.5);
+
+
+/* Variables de colores para el modo oscuro (escala de grises) */
+$color-dark-primary: #333333; /* Gris oscuro */
+$color-dark-secondary: #4f4f4f; /* Gris medio */
+$color-dark-accent: #666666; /* Gris claro */
+$color-dark-background: #1a1a1a; /* Fondo muy oscuro */
+$color-dark-text: #e0e0e0; /* Texto gris claro */
+$color-dark-link: #999999; /* Enlace gris */
+$color-dark-link-hover: #b3b3b3; /* Enlace gris más claro al pasar el cursor */
+$color-dark-border: #4f4f4f; /* Borde gris medio */
+$color-dark-shadow: rgba(0, 0, 0, 0.5); /* Sombra negra con mayor opacidad */
+
+/* Ejemplo de uso de variables en modo actual */
+body {
+  background-color: $color-background;
+  color: $color-text;
+}
+
+a {
+  color: $color-link;
+  &:hover {
+    color: $color-link-hover;
+  }
+}
+
+/* Ejemplo de uso de variables en modo oscuro */
+body.dark-mode {
+  background-color: $color-dark-background;
+  color: $color-dark-text;
+}
+
+a.dark-mode {
+  color: $color-dark-link;
+  &:hover {
+    color: $color-dark-link-hover;
+  }
+}

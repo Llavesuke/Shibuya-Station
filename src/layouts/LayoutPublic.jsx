@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import HamburgerMenu from '../components/HamburguerMenu';
 import Footer from '../components/Footer';
 
 /**
@@ -10,13 +11,18 @@ import Footer from '../components/Footer';
  */
 function LayoutPublic() {
   return (
-    <div className="layout">
-      <Navbar />
-      <main className="content">
+    <section className="layout-public">
+      <header className="layout-public__header">
+        <Navbar />
+        <HamburgerMenu />
+      </header>
+      <main className="layout-public__content">
         <Outlet /> {/* Element that renders the matched child route */}
       </main>
-      <Footer />
-    </div>
+      <footer className="layout-public__footer">
+        <Footer />
+      </footer>
+    </section>
   );
 }
 
