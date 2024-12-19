@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 /**
  * LayoutPublic component that provides a public layout with a navbar, footer, and dynamic content.
  * @component
- * @returns {JSX.Element} The LayoutPublic component.
+ * @returns {JSX.Element} The LayoutPublic component
  */
 function LayoutPublic() {
   return (
