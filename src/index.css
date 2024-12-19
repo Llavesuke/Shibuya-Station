@@ -991,6 +991,7 @@ li {
   text-align: center; /* Centra el texto horizontalmente */
   text-shadow: 2px 2px 5px var(--color-shadow-dark); /* Mejora la legibilidad */
   z-index: 1; /* Coloca el texto encima de la imagen */
+  font-display: swap;
 }
 
 
