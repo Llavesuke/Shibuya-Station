@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.js"
   },
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -40,5 +41,13 @@
     "globals": "^15.11.0",
     "jsdoc": "^4.0.4",
     "vite": "^5.4.10"
-  }
+  },
+  "description": "La diferencia entre declarar estilos de manera **directa** (inline) y **global** (en un archivo CSS separado) radica en la reutilización, mantenibilidad y organización del código:",
+  "main": "eslint.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
