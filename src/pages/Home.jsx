@@ -15,22 +15,24 @@ const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const fetchPopularMangas = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}/manga`, {
-        params: {
-          limit: mangasPerPage,
-          order: { rating: 'desc' },
-          includes: ['cover_art', 'author'],
-        },
-      });
+  const corsProxyUrl = 'http://localhost:5000'; // Proxy local
 
-      setPopularMangas(response.data.data);
-    } catch (err) {
-      console.error('Error fetching popular mangas:', err);
-      setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
-    }
-  };
+const fetchPopularMangas = async () => {
+  try {
+    const response = await axios.get(`${corsProxyUrl}/manga`, {
+      params: {
+        limit: mangasPerPage,
+        order: { rating: 'desc' },
+        includes: ['cover_art', 'author'],
+      },
+    });
+    setPopularMangas(response.data.data);
+  } catch (err) {
+    console.error('Error fetching popular mangas:', err);
+    setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
+  }
+};
+
 
   useEffect(() => {
     fetchPopularMangas();
