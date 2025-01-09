@@ -15,24 +15,25 @@ const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const corsProxyUrl = 'http://localhost:5000'; // Proxy local
+  // Usamos AllOrigins como proxy para evitar CORS
+  const corsProxyUrl = 'https://api.allorigins.win/get?url='; // AllOrigins proxy
 
-const fetchPopularMangas = async () => {
-  try {
-    const response = await axios.get(`${corsProxyUrl}/manga`, {
-      params: {
-        limit: mangasPerPage,
-        order: { rating: 'desc' },
-        includes: ['cover_art', 'author'],
-      },
-    });
-    setPopularMangas(response.data.data);
-  } catch (err) {
-    console.error('Error fetching popular mangas:', err);
-    setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
-  }
-};
-
+  const fetchPopularMangas = async () => {
+    try {
+      const response = await axios.get(corsProxyUrl + encodeURIComponent(`${baseUrl}/manga`), {
+        params: {
+          limit: mangasPerPage,
+          order: { rating: 'desc' },
+          includes: ['cover_art', 'author'],
+        },
+      });
+      const mangasData = JSON.parse(response.data.contents);  // La respuesta de AllOrigins tiene los datos dentro de 'contents'
+      setPopularMangas(mangasData.data);  // Actualizamos el estado con los mangas obtenidos
+    } catch (err) {
+      console.error('Error fetching popular mangas:', err);
+      setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
+    }
+  };
 
   useEffect(() => {
     fetchPopularMangas();
@@ -75,9 +76,12 @@ const fetchPopularMangas = async () => {
             {[...popularMangas, ...popularMangas].map((manga, index) => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
-              const coverUrl = cover
+              
+              // Verificación de cover y cover.attributes
+              const coverUrl = cover && cover.attributes
                 ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-                : 'https://via.placeholder.com/150';
+                : 'https://via.placeholder.com/150'; // Imagen por defecto si no hay portada
+
               const authorName = author ? author.attributes?.name : 'Unknown Author';
               const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
 
