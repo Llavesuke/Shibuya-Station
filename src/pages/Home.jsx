@@ -10,13 +10,13 @@ import MangaCard from '../components/MangaCard';
 const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
-  const mangasPerPage = 15; // Incrementamos para manejar un efecto fluido.
+  const mangasPerPage = 15;
   const baseUrl = 'https://api.mangadex.org';
   const location = useLocation();
   const navigate = useNavigate();
 
   // Usamos AllOrigins como proxy para evitar CORS
-  const corsProxyUrl = 'https://api.allorigins.win/get?url='; // AllOrigins proxy
+  const corsProxyUrl = 'https://api.allorigins.win/get?url=';
 
   const fetchPopularMangas = async () => {
     try {
@@ -27,8 +27,14 @@ const Home = () => {
           includes: ['cover_art', 'author'],
         },
       });
-      const mangasData = JSON.parse(response.data.contents);  // La respuesta de AllOrigins tiene los datos dentro de 'contents'
-      setPopularMangas(mangasData.data);  // Actualizamos el estado con los mangas obtenidos
+
+      // Procesar el campo contents
+      if (response.data && response.data.contents) {
+        const parsedContents = JSON.parse(response.data.contents); // Decodificar contents
+        setPopularMangas(parsedContents.data); // Usar el campo 'data' de 2.json
+      } else {
+        throw new Error('Formato de respuesta inválido');
+      }
     } catch (err) {
       console.error('Error fetching popular mangas:', err);
       setError('Error al obtener los mangas. Por favor, inténtalo más tarde.');
@@ -66,21 +72,19 @@ const Home = () => {
             centeredSlides={true}
             loop={slidesPerView < popularMangas.length}
             slideToClickedSlide={true}
-            preventClicks={false} // Ensure this is set to false
-            preventClicksPropagation={false} // Ensure this is set to false
+            preventClicks={false}
+            preventClicksPropagation={false}
             breakpoints={{
               640: { slidesPerView: 3, spaceBetween: 10 },
               1024: { slidesPerView: 5, spaceBetween: 30 },
             }}
           >
-            {[...popularMangas, ...popularMangas].map((manga, index) => {
+            {popularMangas.map((manga, index) => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
-              
-              // Verificación de cover y cover.attributes
               const coverUrl = cover && cover.attributes
                 ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-                : 'https://via.placeholder.com/150'; // Imagen por defecto si no hay portada
+                : 'https://via.placeholder.com/150'; // Imagen por defecto
 
               const authorName = author ? author.attributes?.name : 'Unknown Author';
               const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
