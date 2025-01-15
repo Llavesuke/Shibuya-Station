@@ -12,6 +12,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
  * @property {string} messagingSenderId - The messaging sender ID for Firebase.
  * @property {string} appId - The app ID for Firebase.
  */
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,

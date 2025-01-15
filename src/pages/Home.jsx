@@ -11,27 +11,21 @@ const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
-  const baseUrl = 'https://api.mangadex.org';
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Usamos AllOrigins como proxy para evitar CORS
-  const corsProxyUrl = 'https://api.allorigins.win/get?url=';
-
   const fetchPopularMangas = async () => {
     try {
-      const response = await axios.get(corsProxyUrl + encodeURIComponent(`${baseUrl}/manga`), {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/manga`, {
         params: {
           limit: mangasPerPage,
-          order: { rating: 'desc' },
+          'order[rating]': 'desc',
           includes: ['cover_art', 'author'],
         },
       });
-
-      // Procesar el campo contents
-      if (response.data && response.data.contents) {
-        const parsedContents = JSON.parse(response.data.contents); // Decodificar contents
-        setPopularMangas(parsedContents.data); // Usar el campo 'data' de 2.json
+  
+      if (response.data && response.data.data) {
+        setPopularMangas(response.data.data);
       } else {
         throw new Error('Formato de respuesta inválido');
       }
@@ -49,7 +43,6 @@ const Home = () => {
     navigate(`/manga/${mangaId}`);
   };
 
-  // Determinar el número de slides visibles dinámicamente
   const slidesPerView = popularMangas.length < 5 ? popularMangas.length : 5;
 
   return (
@@ -57,7 +50,7 @@ const Home = () => {
       <section className="home">
         <img className="home__banner" src="banner-home.png" alt="imagen manga de Shibuya" />
         <h1 className="home__title">WELCOME TO SHIBUYA</h1>
-
+    
         <section className="home__bottom">
           <p className="home__info-box">¡Saliendo de la estación!</p>
           <button className="home__button">Popular</button>
@@ -84,14 +77,14 @@ const Home = () => {
               const author = manga.relationships?.find((rel) => rel.type === 'author');
               const coverUrl = cover && cover.attributes
                 ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-                : 'https://via.placeholder.com/150'; // Imagen por defecto
+                : 'https://via.placeholder.com/150';
 
               const authorName = author ? author.attributes?.name : 'Unknown Author';
               const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
 
               return (
                 <SwiperSlide key={`${manga.id}-${index}`}>
-                  <article className={`home__gallery-item swiper-slide`}>
+                  <article className="home__gallery-item swiper-slide">
                     <MangaCard
                       id={manga.id}
                       title={title}
