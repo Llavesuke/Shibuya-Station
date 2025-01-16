@@ -26,15 +26,20 @@ app.use(
     target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/covers': '',
+      '^/covers': '', // Reescribe el prefijo /covers
     },
     onProxyRes: (proxyRes) => {
-      // Set additional headers to handle CORS for images
+      // Agregar los encabezados CORS para permitir el acceso desde el frontend
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
+      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
       proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
-      proxyRes.headers['cross-origin-embedder-policy'] = 'unsafe-none';
-      proxyRes.headers['cross-origin-opener-policy'] = 'same-origin-allow-popups';
+      proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
+    },
+    // Manejo de las solicitudes OPTIONS (para CORS preflight)
+    onProxyReqWs: (proxyReq, req, socket, head) => {
+      if (req.method === 'OPTIONS') {
+        proxyReq.method = 'GET'; // Cambiar método a GET para la solicitud preflight
+      }
     }
   })
 );
