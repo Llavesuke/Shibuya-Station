@@ -23,7 +23,7 @@ app.use(
 app.use(
   '/covers',
   createProxyMiddleware({
-    target: 'https://uploads.mangadex.org',
+    target: 'https://uploads.mangadex.org/covers',
     changeOrigin: true,
     pathRewrite: {
       '^/covers': '', // Reescribe el prefijo /covers
