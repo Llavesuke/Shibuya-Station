@@ -1,20 +1,29 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import MangaCard from '../components/MangaCard';
+
 const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
-  const baseUrl = "https://shibuya-station-1.onrender.com/api"; // Base URL de la API de MangaDex a través del proxy
+  const baseUrl = "https://shibuya-station-1.onrender.com/api";
   const navigate = useNavigate();
 
   const fetchPopularMangas = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/manga`, {
+      const response = await axios.get(`${baseUrl}/manga`, {       
         params: {
           limit: mangasPerPage,
           'order[rating]': 'desc',
           includes: ['cover_art', 'author'],
         },
       });
-
+  
       if (response.data && response.data.data) {
         setPopularMangas(response.data.data);
       } else {
@@ -28,7 +37,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchPopularMangas();
-  }, []);
+  }, [location]);
 
   const handleCardClick = (mangaId) => {
     navigate(`/manga/${mangaId}`);
@@ -41,7 +50,7 @@ const Home = () => {
       <section className="home">
         <img className="home__banner" src="banner-home.png" alt="imagen manga de Shibuya" />
         <h1 className="home__title">WELCOME TO SHIBUYA</h1>
-
+    
         <section className="home__bottom">
           <p className="home__info-box">¡Saliendo de la estación!</p>
           <button className="home__button">Popular</button>
@@ -66,10 +75,8 @@ const Home = () => {
             {popularMangas.map((manga, index) => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
-
-              // Aquí estamos utilizando el servidor proxy para cargar la portada
               const coverUrl = cover && cover.attributes
-                ? `https://shibuya-station-1.onrender.com/covers/${manga.id}/${cover.attributes.fileName}` // Usamos el proxy
+                ? `https://shibuya-station-1.onrender.com/covers/${manga.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';
 
               const authorName = author ? author.attributes?.name : 'Unknown Author';
@@ -82,7 +89,7 @@ const Home = () => {
                       id={manga.id}
                       title={title}
                       author={authorName}
-                      coverUrl={coverUrl} // La URL de la portada se pasa al componente MangaCard
+                      coverUrl={coverUrl}
                       onClick={() => handleCardClick(manga.id)}
                     />
                   </article>
