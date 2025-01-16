@@ -46,6 +46,7 @@ const useChapter = (chapterId) => {
           const imageUrls = chapter.data.map((filename) => {
             // Verifica si `filename` y `chapter.hash` son válidos antes de crear la URL
             if (filename && chapter.hash) {
+              // Utiliza la URL correcta para la imagen sin agregar el proxy
               return `${imageBaseUrl}/data/${chapter.hash}/${filename}`;
             } else {
               console.error(`Invalid filename or chapter hash: ${filename}, ${chapter.hash}`);
