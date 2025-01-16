@@ -16,6 +16,12 @@ app.use(
     pathRewrite: {
       '^/api': '', // Reescribe el prefijo /api
     },
+    onProxyRes: (proxyRes) => {
+      // Asegurarse de que el proxy permita CORS
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*'; // Permitir solicitudes de cualquier origen
+      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'; // Métodos permitidos
+      proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'; // Encabezados permitidos
+    },
   })
 );
 
