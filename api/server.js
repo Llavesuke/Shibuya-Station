@@ -18,6 +18,17 @@ app.use(
   })
 );
 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'https://uploads.mangadex.org/covers/',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/cover': '', // Reescribe el prefijo /api
+    },
+  })
+);
+
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
 });
