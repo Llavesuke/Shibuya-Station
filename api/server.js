@@ -26,8 +26,16 @@ app.use(
     target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/covers': '', // Reescribe el prefijo /covers
+      '^/covers': '',
     },
+    onProxyRes: (proxyRes) => {
+      // Set additional headers to handle CORS for images
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
+      proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
+      proxyRes.headers['cross-origin-embedder-policy'] = 'unsafe-none';
+      proxyRes.headers['cross-origin-opener-policy'] = 'same-origin-allow-popups';
+    }
   })
 );
 
