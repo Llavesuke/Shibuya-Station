@@ -28,21 +28,21 @@ app.use(
     pathRewrite: {
       '^/covers': '', // Reescribe el prefijo /covers
     },
-    onProxyRes: (proxyRes) => {
-      // Agregar los encabezados CORS para permitir el acceso desde el frontend
+    onProxyRes: (proxyRes, req, res) => {
+      // Aseguramos que los encabezados CORS se envíen correctamente
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
       proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
       proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
-      proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
     },
-    // Manejo de las solicitudes OPTIONS (para CORS preflight)
-    onProxyReqWs: (proxyReq, req, socket, head) => {
+    onProxyReq: (proxyReq, req, res) => {
+      // Enviar encabezado para solicitudes preflight (OPTIONS)
       if (req.method === 'OPTIONS') {
-        proxyReq.method = 'GET'; // Cambiar método a GET para la solicitud preflight
+        proxyReq.method = 'GET'; // Cambiar método de OPTIONS a GET
       }
-    }
+    },
   })
 );
+c
 
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
