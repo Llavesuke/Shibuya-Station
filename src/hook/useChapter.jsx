@@ -43,10 +43,21 @@ const useChapter = (chapterId) => {
 
         // Verifica si baseUrl y chapter están presentes en la respuesta
         if (imageBaseUrl && chapter && chapter.data) {
-          const imageUrls = chapter.data.map(
-            (filename) => `${imageBaseUrl}/data/${chapter.hash}/${filename}`
-          );
-          setPages(imageUrls);
+          const imageUrls = chapter.data.map((filename) => {
+            // Verifica si `filename` y `chapter.hash` son válidos antes de crear la URL
+            if (filename && chapter.hash) {
+              return `${imageBaseUrl}/data/${chapter.hash}/${filename}`;
+            } else {
+              console.error(`Invalid filename or chapter hash: ${filename}, ${chapter.hash}`);
+              return null;
+            }
+          }).filter(url => url !== null); // Filtra URLs inválidas
+
+          if (imageUrls.length > 0) {
+            setPages(imageUrls);
+          } else {
+            throw new Error('No valid image URLs found');
+          }
         } else {
           throw new Error('No images available or incorrect response format');
         }

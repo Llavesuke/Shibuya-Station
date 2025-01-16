@@ -36,7 +36,7 @@ const SearchMobile = ({ onSearchResults }) => {
     setError(null);
 
     try {
-      const response = await axios.get('https://api.mangadex.org/manga', {
+      const response = await axios.get('https://shibuya-station-1.onrender.com/api/manga', {
         params: {
           title: query,
           limit: 5,
@@ -58,7 +58,7 @@ const SearchMobile = ({ onSearchResults }) => {
       const formattedResults = newResults.map((manga) => {
         const cover = manga.relationships.find((rel) => rel.type === 'cover_art');
         const coverUrl = cover && cover.attributes
-          ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.file_name}`
+          ? `https://shibuya-station-1.onrender.com/api2/covers/${manga.id}/${cover.attributes.file_name}`
           : null;
 
         const title = manga.attributes.title.en || manga.attributes.title.ja || 'No title available';

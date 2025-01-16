@@ -24,7 +24,7 @@ const AuthorSearch = ({ author, setAuthor, setAuthorUUID, updateUrlParams }) => 
   const searchAuthors = async (name) => {
     if (name) {
       try {
-        const response = await axios.get('https://api.mangadex.org/author', {
+        const response = await axios.get('https://shibuya-station-1.onrender.com/api/author', {
           params: { limit: 5, name },
         });
         const suggestions = response.data.data.map((author) => ({
