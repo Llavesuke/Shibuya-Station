@@ -37,9 +37,9 @@ const useChapter = (chapterId) => {
 
         // Obtener las páginas del capítulo
         const pagesResponse = await axios.get(`${baseUrl}/at-home/server/${chapterId}`);
-        const { baseUrl: imageBaseUrl, chapter } = pagesResponse.data;
+        const { baseUrl2, chapter } = pagesResponse.data;
         const imageUrls = chapter.data.map(
-          (filename) => `${imageBaseUrl}/data/${chapter.hash}/${filename}`
+          (filename) => `${baseUrl2}/data/${chapter.hash}/${filename}`
         );
 
         setPages(imageUrls);
