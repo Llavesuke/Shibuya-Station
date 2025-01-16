@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const baseUrl = 'https://api.mangadex.org';
+const baseUrl = 'https://shibuya-station-1.onrender.com/api';
 const mangasPerPage = 15;
 
 /**

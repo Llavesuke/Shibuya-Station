@@ -15,28 +15,31 @@ const useChapter = (chapterId) => {
   const [chapterTitle, setChapterTitle] = useState('');
   const [mangaTitle, setMangaTitle] = useState('');
 
+  // URL del proxy en lugar de la API de MangaDex
+  const baseUrl = 'https://shibuya-station-1.onrender.com/api';
+
   useEffect(() => {
     const fetchChapterDetails = async () => {
       try {
-        // Fetch chapter details
-        const chapterResponse = await axios.get(`https://api.mangadex.org/chapter/${chapterId}`);
+        // Obtener los detalles del capítulo a través del proxy
+        const chapterResponse = await axios.get(`${baseUrl}/chapter/${chapterId}`);
         const chapterData = chapterResponse.data.data;
         const title = chapterData.attributes.title || null;
         setChapterTitle(title);
 
-        // Fetch related manga title
+        // Obtener el título del manga relacionado
         const mangaId = chapterData.relationships.find((rel) => rel.type === 'manga')?.id;
         if (mangaId) {
-          const mangaResponse = await axios.get(`https://api.mangadex.org/manga/${mangaId}`);
+          const mangaResponse = await axios.get(`${baseUrl}/manga/${mangaId}`);
           const mangaData = mangaResponse.data.data;
           setMangaTitle(mangaData.attributes.title.en || 'Unknown Title');
         }
 
-        // Fetch chapter pages
-        const pagesResponse = await axios.get(`https://api.mangadex.org/at-home/server/${chapterId}`);
-        const { baseUrl, chapter } = pagesResponse.data;
+        // Obtener las páginas del capítulo
+        const pagesResponse = await axios.get(`${baseUrl}/at-home/server/${chapterId}`);
+        const { baseUrl: imageBaseUrl, chapter } = pagesResponse.data;
         const imageUrls = chapter.data.map(
-          (filename) => `${baseUrl}/data/${chapter.hash}/${filename}`
+          (filename) => `${imageBaseUrl}/data/${chapter.hash}/${filename}`
         );
 
         setPages(imageUrls);
@@ -49,7 +52,7 @@ const useChapter = (chapterId) => {
     };
 
     fetchChapterDetails();
-  }, [chapterId]);
+  }, [chapterId, baseUrl]);
 
   return {
     pages,
