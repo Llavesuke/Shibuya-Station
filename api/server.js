@@ -26,16 +26,19 @@ app.use(
     target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/api2': '', // Reescribe el prefijo /covers
+      '^/api2': '', // Reescribe el prefijo /api2
     },
-    onProxyRes: (proxyRes, req, res) => {
-      // Aseguramos que los encabezados CORS se envíen correctamente
+    onProxyReq: (proxyReq, req, res) => {
+      // Establece el encabezado Referer para evitar el placeholder
+      proxyReq.setHeader('Referer', 'https://mangadex.org');
+    },
+    onProxyRes: (proxyRes) => {
+      // Asegura que los encabezados CORS estén configurados
       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
-      proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
     },
   })
 );
+
 
 
 app.listen(PORT, () => {
