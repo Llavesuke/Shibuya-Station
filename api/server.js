@@ -7,6 +7,7 @@ const PORT = 5000;
 
 app.use(cors());
 
+// Proxy para la API principal de MangaDex
 app.use(
   '/api',
   createProxyMiddleware({
@@ -18,13 +19,14 @@ app.use(
   })
 );
 
+// Proxy para las portadas de MangaDex
 app.use(
-  '/api',
+  '/covers',
   createProxyMiddleware({
-    target: 'https://uploads.mangadex.org/covers/',
+    target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/cover': '', // Reescribe el prefijo /api
+      '^/covers': '', // Reescribe el prefijo /covers
     },
   })
 );
