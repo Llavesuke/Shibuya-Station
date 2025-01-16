@@ -28,6 +28,12 @@ app.use(
     pathRewrite: {
       '^/api2': '', // Reescribe el prefijo /covers
     },
+    onProxyRes: (proxyRes, req, res) => {
+      // Aseguramos que los encabezados CORS se envíen correctamente
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
+      proxyRes.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
+    },
   })
 );
 
