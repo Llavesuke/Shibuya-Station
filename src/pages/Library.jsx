@@ -35,6 +35,9 @@ const Library = () => {
     allTags, includedTags, excludedTags, addTag, removeTag
   } = useTagFilters();
 
+  // Base URL for the API with proxy
+  const baseUrl = "https://shibuya-station-1.onrender.com/api"; // Cambiar por la URL de tu proxy
+
   // Effect to handle filters from the URL
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -147,7 +150,7 @@ const Library = () => {
         {mangas.map((manga) => {
           const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
           const author = manga.relationships?.find((rel) => rel.type === 'author');
-          const coverBase = "https://shibuya-station-1.onrender.com/api2"
+          const coverBase = "https://shibuya-station-1.onrender.com/api2";
           const coverUrl = cover && cover.attributes
                 ? `${coverBase}/covers/${manga.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';

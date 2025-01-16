@@ -24,6 +24,8 @@ const Chapter = () => {
   } = useChapter(chapterId);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(-1);
 
+  const baseUrl = "https://shibuya-station-1.onrender.com/api"; // URL del proxy
+
   useEffect(() => {
     const index = chapters.findIndex(chapter => chapter.id === chapterId);
     setCurrentChapterIndex(index);
@@ -83,12 +85,12 @@ const Chapter = () => {
       </div>
       {viewMode === 'single' ? (
         <article className="chapter__page-container">
-          <img src={pages[currentPage]} alt={`Page ${currentPage + 1}`} className="chapter__page" />
+          <img src={`${baseUrl}/pages/${pages[currentPage]}`} alt={`Page ${currentPage + 1}`} className="chapter__page" />
         </article>
       ) : (
         <article className="chapter__all-pages-container">
           {pages.map((page, index) => (
-            <img key={index} src={page} alt={`Page ${index + 1}`} className="chapter__page" />
+            <img key={index} src={`${baseUrl}/pages/${page}`} alt={`Page ${index + 1}`} className="chapter__page" />
           ))}
         </article>
       )}
