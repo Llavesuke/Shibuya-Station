@@ -12,11 +12,12 @@ const Home = () => {
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
   const baseUrl = import.meta.env.VITE_API_URL;
+  const location = useLocation();
   const navigate = useNavigate();
 
   const fetchPopularMangas = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/manga`, {       
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/manga`, {
         params: {
           limit: mangasPerPage,
           'order[rating]': 'desc',
