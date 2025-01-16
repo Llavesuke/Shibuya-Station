@@ -147,9 +147,10 @@ const Library = () => {
         {mangas.map((manga) => {
           const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
           const author = manga.relationships?.find((rel) => rel.type === 'author');
-          const coverUrl = cover?.attributes?.fileName
-            ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-            : 'https://via.placeholder.com/150';
+          const coverBase = "https://shibuya-station-1.onrender.com/api2"
+          const coverUrl = cover && cover.attributes
+                ? `${coverBase}/covers/${manga.id}/${cover.attributes.fileName}`
+                : 'https://via.placeholder.com/150';
           const authorName = author?.attributes?.name || 'Unknown Author';
           const title = manga.attributes?.title?.en || manga.attributes?.title?.ja || 'Untitled Manga';
 

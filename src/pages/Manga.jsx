@@ -12,7 +12,7 @@ const Manga = () => {
   const { mangaId } = useParams(); // Get the manga ID from the URL parameters
   const [mangaDetails, setMangaDetails] = useState(null); // State to store manga details
   const [chapters, setChapters] = useState([]); // State to store chapters
-  const baseUrl = import.meta.env.VITE_API_URL;
+  const baseUrl = "https://shibuya-station-1.onrender.com/api";
   const navigate = useNavigate(); // Hook to navigate to other routes
   const [user, setUser] = useContext(UserContext); // Get the user state from context
 
@@ -114,9 +114,10 @@ const Manga = () => {
   }, [mangaId]);
 
   const cover = mangaDetails?.relationships?.find((rel) => rel.type === 'cover_art');
-  const coverUrl = cover
-    ? `https://uploads.mangadex.org/covers/${mangaDetails.id}/${cover.attributes?.fileName}`
-    : 'https://via.placeholder.com/490';
+  const coverBase = "https://shibuya-station-1.onrender.com/api2"
+  const coverUrl = cover && cover.attributes
+                ? `${coverBase}/covers/${manga.id}/${cover.attributes.fileName}`
+                : 'https://via.placeholder.com/150';
 
   const author = mangaDetails?.relationships?.find((rel) => rel.type === 'author');
   const authorName = author ? author.attributes?.name : 'Unknown Author';
