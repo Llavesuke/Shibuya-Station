@@ -37,12 +37,19 @@ const useChapter = (chapterId) => {
 
         // Obtener las páginas del capítulo
         const pagesResponse = await axios.get(`${baseUrl}/at-home/server/${chapterId}`);
-        const { baseUrl2, chapter } = pagesResponse.data;
-        const imageUrls = chapter.data.map(
-          (filename) => `${baseUrl2}/data/${chapter.hash}/${filename}`
-        );
+        console.log('Pages Response:', pagesResponse.data);  // Loguear la respuesta
 
-        setPages(imageUrls);
+        const { baseUrl: imageBaseUrl, chapter } = pagesResponse.data;
+
+        // Verifica si baseUrl y chapter están presentes en la respuesta
+        if (imageBaseUrl && chapter && chapter.data) {
+          const imageUrls = chapter.data.map(
+            (filename) => `${imageBaseUrl}/data/${chapter.hash}/${filename}`
+          );
+          setPages(imageUrls);
+        } else {
+          throw new Error('No images available or incorrect response format');
+        }
       } catch (err) {
         console.error('Error fetching chapter details or pages:', err);
         setError('Failed to load chapter.');
