@@ -12,6 +12,7 @@ const Manga = () => {
   const { mangaId } = useParams(); // Get the manga ID from the URL parameters
   const [mangaDetails, setMangaDetails] = useState(null); // State to store manga details
   const [chapters, setChapters] = useState([]); // State to store chapters
+  const [error, setError] = useState(null); // State to store error message
   const baseUrl = "https://shibuya-station-1.onrender.com/api";
   const navigate = useNavigate(); // Hook to navigate to other routes
   const [user, setUser] = useContext(UserContext); // Get the user state from context
@@ -105,8 +106,9 @@ const Manga = () => {
         }
 
         setChapters(allChapters);
-      } catch (error) {
-        console.log("Error fetching manga details:", error);
+      } catch (err) {
+        console.error("Error fetching manga details:", err);
+        setError("There was an issue fetching the manga details. Please try again later.");
       }
     };
 
@@ -116,7 +118,7 @@ const Manga = () => {
   const cover = mangaDetails?.relationships?.find((rel) => rel.type === 'cover_art');
   const coverBase = "https://shibuya-station-1.onrender.com/api2"
   const coverUrl = cover && cover.attributes
-                ? `${coverBase}/covers/${manga.id}/${cover.attributes.fileName}`
+                ? `${coverBase}/covers/${mangaDetails.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';
 
   const author = mangaDetails?.relationships?.find((rel) => rel.type === 'author');
@@ -124,7 +126,9 @@ const Manga = () => {
 
   const tags = mangaDetails?.attributes?.tags?.map((tag) => tag.attributes?.name?.en || tag.attributes?.name?.ja) || [];
 
-  return (
+  return error ? (
+    <div className="error-message">{error}</div>
+  ) : (
     <main className="manga-container">
       {/* Left Section */}
       <section className="manga-left">
@@ -170,11 +174,10 @@ const Manga = () => {
               </li>
             ))}
           </ul>
-          
         </div>
       </aside>
     </main>
-  );
+  )
 };
 
 export default Manga;
