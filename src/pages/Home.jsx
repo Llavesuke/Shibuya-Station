@@ -11,12 +11,13 @@ const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
+  const baseUrl = 'https://api.mangadex.org';
   const location = useLocation();
   const navigate = useNavigate();
 
   const fetchPopularMangas = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/manga`, {
+      const response = await axios.get(`${baseUrl}/manga`, {       
         params: {
           limit: mangasPerPage,
           'order[rating]': 'desc',
