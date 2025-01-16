@@ -42,7 +42,7 @@ app.use(
     },
   })
 );
-c
+
 
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
