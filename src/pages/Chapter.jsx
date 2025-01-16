@@ -24,6 +24,7 @@ const Chapter = () => {
   } = useChapter(chapterId);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(-1);
 
+  // Usa la URL de tu servidor proxy para obtener los datos
   const baseUrl = "https://shibuya-station-1.onrender.com/api"; // URL del proxy
 
   useEffect(() => {
