@@ -76,7 +76,7 @@ const Home = () => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
               const coverUrl = cover && cover.attributes
-                ? `https://shibuya-station-1.onrender.com/covers/covers/${manga.id}/${cover.attributes.fileName}`
+                ? `https://shibuya-station-1.onrender.com/image/covers/${manga.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';
 
               const authorName = author ? author.attributes?.name : 'Unknown Author';

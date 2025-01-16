@@ -19,14 +19,14 @@ app.use(
   })
 );
 
-// Proxy para las portadas de MangaDex (ajustado a /covers)
+// Proxy para las portadas de MangaDex
 app.use(
-  '/covers',
+  '/image',
   createProxyMiddleware({
     target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/covers': '/covers', // No se cambia la ruta, solo proxy al mismo endpoint
+      '^/image': '', // Reescribe el prefijo /covers
     },
     onProxyRes: (proxyRes, req, res) => {
       // Aseguramos que los encabezados CORS se envíen correctamente
@@ -42,6 +42,7 @@ app.use(
     },
   })
 );
+
 
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
