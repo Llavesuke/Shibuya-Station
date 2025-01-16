@@ -12,7 +12,7 @@ const Manga = () => {
   const { mangaId } = useParams(); // Get the manga ID from the URL parameters
   const [mangaDetails, setMangaDetails] = useState(null); // State to store manga details
   const [chapters, setChapters] = useState([]); // State to store chapters
-  const baseUrl = 'https://api.mangadex.org';
+  const baseUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate(); // Hook to navigate to other routes
   const [user, setUser] = useContext(UserContext); // Get the user state from context
 
