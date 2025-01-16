@@ -26,7 +26,7 @@ app.use(
     target: 'https://uploads.mangadex.org/covers',
     changeOrigin: true,
     pathRewrite: {
-      '^/covers': '', // Reescribe el prefijo /covers
+      '^/image': '', // Reescribe el prefijo /covers
     },
     onProxyRes: (proxyRes, req, res) => {
       // Aseguramos que los encabezados CORS se envíen correctamente
