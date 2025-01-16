@@ -39,7 +39,7 @@ const useChapter = (chapterId) => {
         const pagesResponse = await axios.get(`${baseUrl}/at-home/server/${chapterId}`);
         console.log('Pages Response:', pagesResponse.data);  // Loguear la respuesta
 
-        const { baseUrl: imageBaseUrl, chapter } = pagesResponse.data;
+        const { imageBaseUrl, chapter } = pagesResponse.data;
 
         // Verifica si baseUrl y chapter están presentes en la respuesta
         if (imageBaseUrl && chapter && chapter.data) {
