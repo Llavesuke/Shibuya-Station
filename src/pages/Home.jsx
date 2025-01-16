@@ -11,7 +11,7 @@ const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
-  const baseUrl = import.meta.env.VITE_API_URL;
+  const baseUrl = "https://shibuya-station-1.onrender.com/api";
   const navigate = useNavigate();
 
   const fetchPopularMangas = async () => {
