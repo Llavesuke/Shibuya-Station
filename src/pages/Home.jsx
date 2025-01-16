@@ -75,8 +75,9 @@ const Home = () => {
             {popularMangas.map((manga, index) => {
               const cover = manga.relationships?.find((rel) => rel.type === 'cover_art');
               const author = manga.relationships?.find((rel) => rel.type === 'author');
+              const coverBase = "https://shibuya-station-1.onrender.com/api2"
               const coverUrl = cover && cover.attributes
-                ? `https://shibuya-station-1.onrender.com/covers/${manga.id}/${cover.attributes.fileName}`
+                ? `${coverBase}/covers/${manga.id}/${cover.attributes.fileName}`
                 : 'https://via.placeholder.com/150';
 
               const authorName = author ? author.attributes?.name : 'Unknown Author';
