@@ -11,8 +11,7 @@ const Home = () => {
   const [popularMangas, setPopularMangas] = useState([]);
   const [error, setError] = useState(null);
   const mangasPerPage = 15;
-  const baseUrl = 'https://api.mangadex.org';
-  const location = useLocation();
+  const baseUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const fetchPopularMangas = async () => {
