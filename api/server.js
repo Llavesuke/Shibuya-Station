@@ -19,20 +19,21 @@ app.use(
   })
 );
 
-// Proxy para las portadas de MangaDex
+
 app.use(
-  '/api2', // Ruta proxy para imágenes
+  '/api2',
   createProxyMiddleware({
-    target: 'https://uploads.mangadex.org',
-    changeOrigin: true,
-    pathRewrite: { '^/api2': '' }, // Reescribe el prefijo
-    onProxyReq: (proxyReq) => {
-      proxyReq.setHeader('Referer', 'https://mangadex.org'); // Encabezado Referer válido
-      proxyReq.setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'); // User-Agent válido
+    target: 'https://uploads.mangadex.org', // Redirige al dominio de imágenes de MangaDex
+    changeOrigin: true, // Cambia el origen para que coincida con el destino
+    secure: true, // Asegúrate de que el proxy utiliza HTTPS
+    pathRewrite: {
+      '^/api2': '', // Elimina el prefijo /api2 para que las rutas sean correctas
     },
-    onProxyRes: (proxyRes) => {
-      proxyRes.headers['Access-Control-Allow-Origin'] = '*'; // Encabezado CORS
+    headers: {
+      Referer: 'https://mangadex.org', // Incluye un Referer válido
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', // Simula un navegador moderno
     },
+    logLevel: 'debug', // Activa los logs detallados para depuración
   })
 );
 
