@@ -5,32 +5,46 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 const app = express();
 const PORT = 5000;
 
+// Enable CORS for all routes
 app.use(cors());
 
-// Proxy para la API principal de MangaDex
+// Proxy to MangaDex API
 app.use(
   '/api',
   createProxyMiddleware({
     target: 'https://api.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/api': '', // Reescribe el prefijo /api
+      '^/api': '', // Remove the /api prefix
     },
+    onProxyRes: (proxyRes, req, res) => {
+      // Add CORS headers for the proxy response
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    }
   })
 );
 
-// Proxy para las portadas de MangaDex
+// Proxy for MangaDex cover images
 app.use(
   '/covers',
   createProxyMiddleware({
     target: 'https://uploads.mangadex.org',
     changeOrigin: true,
     pathRewrite: {
-      '^/covers': '', // Reescribe el prefijo /covers
+      '^/covers': '', // Remove the /covers prefix
     },
+    onProxyRes: (proxyRes, req, res) => {
+      // Add CORS headers for the proxy response
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    }
   })
 );
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
 });
